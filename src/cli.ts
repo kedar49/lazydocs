@@ -7,7 +7,7 @@ import * as path from 'path';
 import { generateReadme } from './o/r';
 import { generatePrDesc } from './o/p';
 import { generateChangelog } from './o/c';
-import { AVAILABLE_MODELS } from './ai';
+import { getAvailableModels, getFallbackModels, getDefaultModel } from './ai';
 
 // Config loaded from file or environment
 const configPath = path.join(os.homedir(), '.lazydocs');
@@ -77,7 +77,7 @@ program
   .option('-i, --input <dir>', 'Input code directory', './src')
   .option('-o, --output <file>', 'Output file')
   .option('-t, --type <type>', 'Doc type: readme, pr, changelog', 'readme')
-  .option('-m, --model <model>', 'AI model to use', 'llama-3.1-70b-versatile')
+  .option('-m, --model <model>', 'AI model to use', 'llama-3.3-70b-versatile')
   .option('--temperature <temp>', 'AI temperature (0-1)', parseFloat, 0.7)
   .option('--max-tokens <tokens>', 'Maximum tokens', parseInt, 2048)
   .option('--interactive', 'Interactive mode')
@@ -88,6 +88,24 @@ program
 
       // Interactive mode
       if (options.interactive) {
+        // Get API key first for model fetching
+        let apiKey = process.env.GROQ_API_KEY || config.GROQ_API_KEY;
+        if (!apiKey) {
+          const keyAnswer = await inquirer.default.prompt([
+            {
+              type: 'password',
+              name: 'apiKey',
+              message: '🔑 Enter your Groq API key (from console.groq.com):',
+              validate: (input: string) => (input ? true : 'API key is required!'),
+            },
+          ]);
+          apiKey = keyAnswer.apiKey;
+        }
+
+        // Fetch available models
+        console.log('🔍 Fetching available models...');
+        const availableModels = await getAvailableModels(apiKey);
+
         const answers = await inquirer.default.prompt([
           {
             type: 'list',
@@ -109,11 +127,11 @@ program
             type: 'list',
             name: 'model',
             message: '🤖 Select AI model:',
-            choices: AVAILABLE_MODELS.map(m => ({
+            choices: availableModels.map(m => ({
               name: m,
               value: m,
             })),
-            default: 'llama-3.1-70b-versatile',
+            default: getDefaultModel(),
           },
         ]);
         Object.assign(options, answers);
@@ -129,11 +147,7 @@ program
         options.output = defaults[options.type];
       }
 
-      // Validate model
-      if (!AVAILABLE_MODELS.includes(options.model)) {
-        console.error(`❌ Invalid model. Available models: ${AVAILABLE_MODELS.join(', ')}`);
-        process.exit(1);
-      }
+      // Model validation will be done by Groq API
 
       // Get API key
       let apiKey = process.env.GROQ_API_KEY || config.GROQ_API_KEY;
@@ -257,11 +271,40 @@ program
 program
   .command('models')
   .description('List available AI models')
-  .action(() => {
-    console.log('🤖 Available AI Models:');
-    AVAILABLE_MODELS.forEach((model, index) => {
-      console.log(`  ${index + 1}. ${model}`);
-    });
+  .option('--refresh', 'Fetch latest models from API')
+  .action(async (options) => {
+    try {
+      if (options.refresh) {
+        const apiKey = process.env.GROQ_API_KEY || config.GROQ_API_KEY;
+        if (!apiKey) {
+          console.error('❌ API key required. Set with: lazydocs config set GROQ_API_KEY=your_key');
+          process.exit(1);
+        }
+
+        console.log('🔍 Fetching latest models from Groq API...\n');
+        const models = await getAvailableModels(apiKey);
+
+        console.log('🤖 Available AI Models:\n');
+        models.forEach((model, index) => {
+          const isDefault = model === getDefaultModel();
+          const marker = isDefault ? '⭐' : '  ';
+          console.log(`${marker} ${index + 1}. ${model}${isDefault ? ' (default)' : ''}`);
+        });
+        console.log(`\n✅ Found ${models.length} active models`);
+      } else {
+        console.log('🤖 Available AI Models (fallback list):\n');
+        const models = getFallbackModels();
+        models.forEach((model, index) => {
+          const isDefault = model === getDefaultModel();
+          const marker = isDefault ? '⭐' : '  ';
+          console.log(`${marker} ${index + 1}. ${model}${isDefault ? ' (default)' : ''}`);
+        });
+        console.log('\n💡 Use --refresh to fetch latest models from API');
+      }
+    } catch (error: any) {
+      console.error(`❌ Error: ${error.message}`);
+      process.exit(1);
+    }
   });
 
 program.parse();

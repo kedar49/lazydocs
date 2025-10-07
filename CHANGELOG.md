@@ -5,6 +5,30 @@ All notable changes to LazyDocs will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-10-07
+
+### 🚀 Features
+- Dynamic model fetching from Groq API
+- `lazydocs models --refresh` to get latest models
+- Interactive mode now shows all available models
+- Updated to current, non-deprecated models
+
+### 📦 Models
+- Updated default model to `llama-3.3-70b-versatile`
+- Added support for OpenAI models (gpt-oss-120b, gpt-oss-20b)
+- All models support 131K+ context windows
+- Automatic fallback if API fetch fails
+
+### 📚 Documentation
+- Simplified README (professional yet casual)
+- Removed verbose documentation files
+- Better model descriptions
+
+### 🔧 Improvements
+- Cleaner package structure
+- Better error messages
+- Improved user experience
+
 ## [1.0.1] - 2025-10-07
 
 ### 📦 Package Improvements

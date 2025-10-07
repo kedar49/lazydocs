@@ -38,7 +38,7 @@ export class ConfigManager {
     if (this.config[key] !== undefined) {
       return this.config[key];
     }
-    
+
     // Handle environment variables with proper type conversion
     const envValue = process.env[key];
     if (envValue !== undefined) {
@@ -51,7 +51,7 @@ export class ConfigManager {
       }
       return envValue as Config[K];
     }
-    
+
     return undefined;
   }
 
@@ -61,7 +61,7 @@ export class ConfigManager {
 
   getDefaults(): Config {
     return {
-      DEFAULT_MODEL: 'llama-3.1-70b-versatile',
+      DEFAULT_MODEL: 'llama-3.3-70b-versatile',
       MAX_TOKENS: 1024,
       TEMPERATURE: 0.7,
       OUTPUT_FORMAT: 'markdown',

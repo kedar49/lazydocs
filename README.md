@@ -73,16 +73,22 @@ LazyDocs scans your code (JS, TS, JSX, TSX) and generates:
 
 ## Models
 
-Choose your speed vs quality:
+Popular models (all with 131K+ context):
 
-- `llama-3.1-70b-versatile` - Best quality (default)
+- `llama-3.3-70b-versatile` - Best quality (default)
 - `llama-3.1-8b-instant` - Fastest
-- `mixtral-8x7b-32768` - Huge context window
-- `gemma2-9b-it` - Good balance
+- `openai/gpt-oss-120b` - OpenAI 120B
+- `openai/gpt-oss-20b` - OpenAI 20B
 
 ```bash
-lazydocs models  # See all available
+# List available models
+lazydocs models
+
+# Fetch latest from API
+lazydocs models --refresh
 ```
+
+Interactive mode automatically fetches the latest models.
 
 ## Examples
 

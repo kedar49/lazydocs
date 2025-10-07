@@ -7,13 +7,38 @@ export interface AIOptions {
   retries?: number;
 }
 
-const DEFAULT_MODEL = 'llama-3.1-70b-versatile';
-const AVAILABLE_MODELS = [
-  'llama-3.1-70b-versatile',
+const DEFAULT_MODEL = 'llama-3.3-70b-versatile';
+
+// Fallback models if API fetch fails
+const FALLBACK_MODELS = [
+  'llama-3.3-70b-versatile',
   'llama-3.1-8b-instant',
-  'mixtral-8x7b-32768',
-  'gemma2-9b-it',
+  'openai/gpt-oss-120b',
+  'openai/gpt-oss-20b',
+  'meta-llama/llama-guard-4-12b',
 ];
+
+export async function getAvailableModels(apiKey: string): Promise<string[]> {
+  try {
+    const groq = new Groq({ apiKey });
+    const models = await groq.models.list();
+    return models.data
+      .filter((model: any) => model.active !== false)
+      .map((model: any) => model.id)
+      .sort();
+  } catch (error) {
+    console.warn('Failed to fetch models from API, using fallback list');
+    return FALLBACK_MODELS;
+  }
+}
+
+export function getDefaultModel(): string {
+  return DEFAULT_MODEL;
+}
+
+export function getFallbackModels(): string[] {
+  return FALLBACK_MODELS;
+}
 
 export async function generateDocSection(
   codeSnippet: string,
@@ -108,5 +133,3 @@ Format in Markdown with proper versioning and dates.`,
 
   return 'Error generating content after multiple attempts';
 }
-
-export { AVAILABLE_MODELS };
