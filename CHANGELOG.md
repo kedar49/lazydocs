@@ -5,7 +5,23 @@ All notable changes to LazyDocs will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2025-01-07
+## [1.0.1] - 2025-10-07
+
+### 📦 Package Improvements
+- Reduced package size from 27.4 KB to 15.8 KB (42% smaller)
+- Optimized .npmignore to exclude non-essential files
+- Improved .gitignore for better development experience
+
+### 📚 Documentation
+- Simplified README for better readability
+- Created concise QUICK_START guide
+- Removed verbose documentation from package
+
+### 🔧 Maintenance
+- Better file organization
+- Cleaner package distribution
+
+## [1.0.0] - 2025-10-07
 
 ### 🚀 Features
 - Initial release of LazyDocs

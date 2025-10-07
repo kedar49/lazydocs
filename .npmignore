@@ -1,7 +1,57 @@
-node_modules
-dist
-.env
-.lazydocs
+# Source files (users don't need these)
+src/
+tests/
+*.test.ts
+*.spec.ts
+
+# Development files
 tsconfig.json
 jest.config.js
+.eslintrc.js
+.prettierrc
+.editorconfig
+
+# Documentation (keep only essential)
 ENHANCEMENTS.md
+SETUP_COMPLETE.md
+GITHUB_WORKFLOWS_SETUP.md
+PUBLISHED.md
+QUICK_START.md
+
+# GitHub (keep minimal)
+.github/badges.md
+.github/README.md
+.github/WORKFLOWS.md
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and temp
+*.log
+*.tmp
+.cache/
+coverage/
+.nyc_output/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+
+# Build artifacts
+*.tsbuildinfo
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
