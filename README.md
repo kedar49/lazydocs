@@ -1,138 +1,170 @@
 # LazyDocs
 
-> AI-powered documentation generator using Groq's lightning-fast LLM API
+> Stop writing docs. Let AI do it.
 
-[![npm version](https://img.shields.io/npm/v/@tfkedar/lazydocs)](https://www.npmjs.com/package/@tfkedar/lazydocs)
-[![CI](https://github.com/kedar49/lazydocs/workflows/CI/badge.svg)](https://github.com/kedar49/lazydocs/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm](https://img.shields.io/npm/v/@tfkedar/lazydocs)](https://www.npmjs.com/package/@tfkedar/lazydocs)
+[![CI](https://github.com/kedar49/lazydocs/workflows/CI/badge.svg)](https://github.com/kedar49/lazydocs/actions)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Generate professional READMEs, PR descriptions, and changelogs from your codebase automatically.
+LazyDocs uses Groq's lightning-fast AI to generate professional documentation from your codebase. READMEs, PR descriptions, changelogs—all in seconds.
 
-## Quick Start
+## Why LazyDocs?
+
+- **Fast** - Powered by Groq's LLM inference (seriously fast)
+- **Smart** - Analyzes your actual code structure
+- **Easy** - Interactive CLI that just works
+- **Free** - Groq API is free to use
+
+## Install
 
 ```bash
-# Install
 npm install -g @tfkedar/lazydocs
+```
 
-# Configure
+## Setup
+
+Get a free API key from [console.groq.com](https://console.groq.com), then:
+
+```bash
 lazydocs config set GROQ_API_KEY=your_key_here
+```
 
-# Generate (interactive)
+## Use
+
+### Interactive Mode (Recommended)
+
+```bash
 lazydocs generate --interactive
 ```
 
-Get your free API key at [console.groq.com](https://console.groq.com)
+Walks you through everything. Pick what to generate, choose your model, done.
 
-## Features
+### Quick Commands
 
-- 🤖 **AI-Powered** - Uses Groq's fast LLM inference
-- 📝 **Multiple Formats** - README, PR descriptions, changelogs
-- ⚡ **Fast** - Analyzes JS/TS/JSX/TSX codebases in seconds
-- 🎨 **Interactive** - Easy-to-use CLI with prompts
-- 🔧 **Configurable** - Choose models, adjust parameters
-
-## Usage
-
-### Generate README
 ```bash
-lazydocs generate --type readme --input ./src
-```
+# Generate README
+lazydocs generate --type readme
 
-### Generate PR Description
-```bash
+# Generate PR description
 lazydocs generate --type pr
-```
 
-### Generate Changelog
-```bash
+# Generate changelog from git history
 lazydocs generate --type changelog
 ```
 
-### Interactive Mode
-```bash
-lazydocs generate --interactive
-```
-
-## Commands
-
-| Command | Description |
-|---------|-------------|
-| `generate` | Generate documentation |
-| `config` | Manage configuration |
-| `init` | Initialize project |
-| `models` | List available AI models |
-
-## Options
+### Advanced
 
 ```bash
-lazydocs generate [options]
-
-Options:
-  -i, --input <dir>       Input directory (default: "./src")
-  -o, --output <file>     Output file
-  -t, --type <type>       Type: readme, pr, changelog (default: "readme")
-  -m, --model <model>     AI model to use
-  --temperature <temp>    AI temperature 0-1 (default: 0.7)
-  --max-tokens <tokens>   Max tokens (default: 2048)
-  --interactive           Interactive mode
-  --verbose               Verbose output
+lazydocs generate \
+  --type readme \
+  --input ./src \
+  --model llama-3.1-8b-instant \
+  --temperature 0.7 \
+  --verbose
 ```
 
-## Available Models
+## What It Does
+
+LazyDocs scans your code (JS, TS, JSX, TSX) and generates:
+
+- **READMEs** - Project overview, installation, usage, API docs
+- **PR Descriptions** - Summary of changes from git diff
+- **Changelogs** - Categorized release notes from commits
+
+## Models
+
+Choose your speed vs quality:
 
 - `llama-3.1-70b-versatile` - Best quality (default)
 - `llama-3.1-8b-instant` - Fastest
-- `mixtral-8x7b-32768` - Large context
-- `gemma2-9b-it` - Efficient
-
-## Configuration
-
-Config stored in `~/.lazydocs`:
+- `mixtral-8x7b-32768` - Huge context window
+- `gemma2-9b-it` - Good balance
 
 ```bash
-# Set API key
-lazydocs config set GROQ_API_KEY=your_key
-
-# View config
-lazydocs config list
+lazydocs models  # See all available
 ```
 
 ## Examples
 
-### Basic README Generation
+### Generate README for your project
+
 ```bash
-cd my-project
-lazydocs generate
+cd my-awesome-project
+lazydocs generate --type readme
 ```
 
-### Custom Model and Output
-```bash
-lazydocs generate \
-  --type readme \
-  --model llama-3.1-8b-instant \
-  --output ./docs/README.md
-```
+Creates `README.md` with:
+- Project overview
+- Installation steps
+- Usage examples
+- API documentation
 
-### PR Description from Git Diff
+### Create PR description
+
 ```bash
 git add .
 lazydocs generate --type pr --output PR.md
 ```
 
-## Supported Files
+Analyzes your changes and writes a clear PR description.
 
-- JavaScript (`.js`, `.mjs`, `.cjs`)
-- TypeScript (`.ts`)
-- React (`.jsx`, `.tsx`)
+### Auto-generate changelog
+
+```bash
+lazydocs generate --type changelog
+```
+
+Reads your git history and creates a formatted changelog.
+
+## Configuration
+
+Config lives in `~/.lazydocs`:
+
+```bash
+# Set API key
+lazydocs config set GROQ_API_KEY=your_key
+
+# View all config
+lazydocs config list
+
+# Get specific value
+lazydocs config get GROQ_API_KEY
+```
+
+## Options
+
+```
+lazydocs generate [options]
+
+Options:
+  -i, --input <dir>       Code directory (default: "./src")
+  -o, --output <file>     Output file (auto-detected)
+  -t, --type <type>       readme | pr | changelog (default: "readme")
+  -m, --model <model>     AI model to use
+  --temperature <n>       Creativity 0-1 (default: 0.7)
+  --max-tokens <n>        Max response length (default: 2048)
+  --interactive           Interactive mode
+  --verbose               Show details
+  -h, --help              Show help
+```
+
+## Tips
+
+- Use `--interactive` for the easiest experience
+- Try different models—faster isn't always worse
+- Use `--verbose` to see what's happening
+- Works best with well-structured code
 
 ## Requirements
 
-- Node.js >= 18
-- Groq API key (free at [console.groq.com](https://console.groq.com))
+- Node.js 18 or higher
+- Free Groq API key
 
 ## Contributing
 
-Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)
+Found a bug? Want a feature? [Open an issue](https://github.com/kedar49/lazydocs/issues) or submit a PR.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 
@@ -141,10 +173,10 @@ MIT © [Kedar Sathe](https://github.com/kedar49)
 ## Links
 
 - [NPM Package](https://www.npmjs.com/package/@tfkedar/lazydocs)
-- [GitHub Repository](https://github.com/kedar49/lazydocs)
+- [GitHub Repo](https://github.com/kedar49/lazydocs)
 - [Report Issues](https://github.com/kedar49/lazydocs/issues)
-- [Groq API](https://console.groq.com)
+- [Groq Console](https://console.groq.com)
 
 ---
 
-*Made with ❤️ by Kedar*
+Built with [Groq](https://groq.com) • Made by [@kedar49](https://github.com/kedar49)

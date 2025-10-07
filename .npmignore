@@ -1,21 +1,23 @@
-# Source files (users don't need these)
+# Source files
 src/
 tests/
 *.test.ts
 *.spec.ts
 
-# Development files
+# Development
 tsconfig.json
 jest.config.js
 .eslintrc.js
 .prettierrc
 .editorconfig
 
-# Documentation (keep only essential)
+# Documentation (verbose)
 ENHANCEMENTS.md
 SETUP_COMPLETE.md
 GITHUB_WORKFLOWS_SETUP.md
 PUBLISHED.md
+RELEASE_NOTES.md
+FINAL_SUMMARY.md
 QUICK_START.md
 
 # GitHub (keep minimal)
@@ -34,9 +36,8 @@ QUICK_START.md
 *.swp
 *.swo
 
-# Logs and temp
+# Logs
 *.log
-*.tmp
 .cache/
 coverage/
 .nyc_output/
@@ -49,7 +50,7 @@ Thumbs.db
 .env
 .env.*
 
-# Build artifacts
+# Build
 *.tsbuildinfo
 node_modules/
 package-lock.json
