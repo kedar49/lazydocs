@@ -1,6 +1,40 @@
 // Initialize Lucide icons
 lucide.createIcons();
 
+// Mobile menu toggle
+const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        const icon = mobileMenuToggle.querySelector('i');
+        const isOpen = navLinks.classList.contains('active');
+        icon.setAttribute('data-lucide', isOpen ? 'x' : 'menu');
+        lucide.createIcons();
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.navbar')) {
+            navLinks.classList.remove('active');
+            const icon = mobileMenuToggle.querySelector('i');
+            icon.setAttribute('data-lucide', 'menu');
+            lucide.createIcons();
+        }
+    });
+
+    // Close menu when clicking a link
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            const icon = mobileMenuToggle.querySelector('i');
+            icon.setAttribute('data-lucide', 'menu');
+            lucide.createIcons();
+        });
+    });
+}
+
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -116,60 +150,89 @@ document.querySelectorAll('pre code').forEach(block => {
     });
 });
 
-// Parallax effect for hero blobs
+// Parallax effect for hero blobs (only on desktop)
 let mouseX = 0;
 let mouseY = 0;
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX / window.innerWidth;
-    mouseY = e.clientY / window.innerHeight;
-});
+if (!isMobile && !prefersReducedMotion) {
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX / window.innerWidth;
+        mouseY = e.clientY / window.innerHeight;
+    });
 
-function animateBlobs() {
-    const blob1 = document.querySelector('.blob-1');
-    const blob2 = document.querySelector('.blob-2');
+    function animateBlobs() {
+        const blob1 = document.querySelector('.blob-1');
+        const blob2 = document.querySelector('.blob-2');
 
-    if (blob1 && blob2) {
-        const moveX1 = (mouseX - 0.5) * 50;
-        const moveY1 = (mouseY - 0.5) * 50;
-        const moveX2 = (mouseX - 0.5) * -30;
-        const moveY2 = (mouseY - 0.5) * -30;
+        if (blob1 && blob2) {
+            const moveX1 = (mouseX - 0.5) * 50;
+            const moveY1 = (mouseY - 0.5) * 50;
+            const moveX2 = (mouseX - 0.5) * -30;
+            const moveY2 = (mouseY - 0.5) * -30;
 
-        blob1.style.transform = `translate(${moveX1}px, ${moveY1}px)`;
-        blob2.style.transform = `translate(${moveX2}px, ${moveY2}px)`;
+            blob1.style.transform = `translate(${moveX1}px, ${moveY1}px)`;
+            blob2.style.transform = `translate(${moveX2}px, ${moveY2}px)`;
+        }
+
+        requestAnimationFrame(animateBlobs);
     }
 
-    requestAnimationFrame(animateBlobs);
+    animateBlobs();
 }
 
-animateBlobs();
-
-// Navbar scroll effect
+// Navbar scroll effect with throttling for better mobile performance
 let lastScroll = 0;
+let ticking = false;
 const navbar = document.querySelector('.navbar');
 
 window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            const currentScroll = window.pageYOffset;
 
-    if (currentScroll > 100) {
-        navbar.style.boxShadow = '0 4px 12px var(--shadow)';
-    } else {
-        navbar.style.boxShadow = 'none';
+            if (currentScroll > 100) {
+                navbar.style.boxShadow = '0 4px 12px var(--shadow)';
+            } else {
+                navbar.style.boxShadow = 'none';
+            }
+
+            lastScroll = currentScroll;
+            ticking = false;
+        });
+
+        ticking = true;
     }
+}, { passive: true });
 
-    lastScroll = currentScroll;
-});
+// Add hover effect to feature cards (desktop only)
+if (!isMobile) {
+    document.querySelectorAll('.feature-card, .example-card, .model-card').forEach(card => {
+        card.addEventListener('mouseenter', function () {
+            this.style.transform = 'translateY(-8px) scale(1.02)';
+        });
 
-// Add hover effect to feature cards
-document.querySelectorAll('.feature-card, .example-card, .model-card').forEach(card => {
-    card.addEventListener('mouseenter', function () {
-        this.style.transform = 'translateY(-8px) scale(1.02)';
+        card.addEventListener('mouseleave', function () {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
     });
+}
 
-    card.addEventListener('mouseleave', function () {
-        this.style.transform = 'translateY(0) scale(1)';
+// Touch feedback for mobile
+if (isMobile) {
+    document.querySelectorAll('.btn, .feature-card, .example-card, .model-card').forEach(element => {
+        element.addEventListener('touchstart', function () {
+            this.style.transform = 'scale(0.98)';
+        });
+
+        element.addEventListener('touchend', function () {
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
     });
-});
+}
 
 // Animate numbers (if you want to add stats)
 function animateValue(element, start, end, duration) {
