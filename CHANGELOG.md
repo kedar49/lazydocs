@@ -5,6 +5,17 @@ All notable changes to LazyDocs will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2025-01-07
+
+### Fixed
+- Template files (.hbs) now included in npm package
+- Added copy-templates script to build process
+- Updated .npmignore to ensure dist/t/ folder is included
+
+### Technical
+- Build script now copies Handlebars templates to dist folder
+- Fixes "ENOENT: no such file or directory" error when generating README
+
 ## [1.2.0] - 2025-01-07
 
 ### Changed

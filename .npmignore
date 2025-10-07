@@ -1,8 +1,11 @@
-# Source files
+# Source files (but keep dist/)
 src/
 tests/
 *.test.ts
 *.spec.ts
+
+# Ensure templates are included
+!dist/t/
 
 # Website
 web/
