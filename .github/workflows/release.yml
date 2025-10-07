@@ -5,6 +5,10 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   create-release:
     name: Create Release
@@ -38,22 +42,34 @@ jobs:
       - name: Generate changelog for this release
         id: changelog
         run: |
-          # Extract changelog for this version
           VERSION=${{ steps.get_version.outputs.VERSION }}
-          CHANGELOG=$(sed -n "/## \[$VERSION\]/,/## \[/p" CHANGELOG.md | sed '$d')
+          if [ -f CHANGELOG.md ]; then
+            CHANGELOG=$(sed -n "/## \[$VERSION\]/,/## \[/p" CHANGELOG.md | sed '$d' || echo "See CHANGELOG.md for details")
+          else
+            CHANGELOG="See repository for details"
+          fi
           echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
           echo "$CHANGELOG" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
       
+      - name: Package for distribution
+        run: |
+          mkdir -p dist-package
+          cp -r dist package.json README.md LICENSE dist-package/
+          if [ -f CHANGELOG.md ]; then
+            cp CHANGELOG.md dist-package/
+          fi
+          cd dist-package
+          tar -czf ../lazydocs-${{ steps.get_version.outputs.VERSION }}.tar.gz .
+      
       - name: Create GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ steps.get_version.outputs.VERSION }}
+          name: LazyDocs v${{ steps.get_version.outputs.VERSION }}
           body: |
             # LazyDocs v${{ steps.get_version.outputs.VERSION }}
+            
+            ## What's New
             
             ${{ steps.changelog.outputs.CHANGELOG }}
             
@@ -63,24 +79,24 @@ jobs:
             npm install -g @tfkedar/lazydocs@${{ steps.get_version.outputs.VERSION }}
             ```
             
-            ## What's Changed
-            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for full details.
+            ## Quick Start
+            
+            ```bash
+            # Configure
+            lazydocs config set GROQ_API_KEY=your_key
+            
+            # Generate
+            lazydocs generate --interactive
+            ```
+            
+            ## Links
+            
+            - [NPM Package](https://www.npmjs.com/package/@tfkedar/lazydocs)
+            - [Documentation](https://github.com/${{ github.repository }}#readme)
+            - [Changelog](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)
           draft: false
           prerelease: false
-      
-      - name: Package for distribution
-        run: |
-          mkdir -p dist-package
-          cp -r dist package.json README.md LICENSE CHANGELOG.md dist-package/
-          cd dist-package
-          tar -czf ../lazydocs-${{ steps.get_version.outputs.VERSION }}.tar.gz .
-      
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+          files: |
+            lazydocs-${{ steps.get_version.outputs.VERSION }}.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./lazydocs-${{ steps.get_version.outputs.VERSION }}.tar.gz
-          asset_name: lazydocs-${{ steps.get_version.outputs.VERSION }}.tar.gz
-          asset_content_type: application/gzip
