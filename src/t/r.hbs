@@ -1,0 +1,43 @@
+# {{projectName}}
+
+## 📋 Overview
+{{{overview}}}
+
+{{#if stats}}
+## 📊 Project Statistics
+- **Files analyzed:** {{stats.fileCount}}
+- **Total lines of code:** {{stats.totalLines}}
+- **Functions:** {{stats.functions}}
+- **Classes:** {{stats.classes}}
+{{/if}}
+
+## 🚀 Installation
+
+```bash
+npm install {{projectName}}
+```
+
+## 💡 Usage
+{{{usage}}}
+
+{{#if apis.length}}
+## 📚 API Reference
+
+| Function/Class | Description |
+|----------------|-------------|
+{{#each apis}}
+| `{{name}}` | {{{desc}}} |
+{{/each}}
+{{/if}}
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+*Documentation generated with ❤️ by [LazyDocs](https://github.com/kedar49/lazydocs)*

@@ -1,0 +1,60 @@
+{
+  "name": "lazydocs",
+  "version": "1.0.0",
+  "description": "AI-powered documentation generator for your codebase",
+  "main": "dist/index.js",
+  "bin": {
+    "lazydocs": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build && npm test",
+    "postinstall": "echo '✅ LazyDocs installed! Run: lazydocs --help'"
+  },
+  "keywords": [
+    "ai",
+    "documentation",
+    "groq",
+    "readme",
+    "changelog",
+    "pr",
+    "generator",
+    "cli",
+    "markdown",
+    "llm",
+    "typescript",
+    "javascript"
+  ],
+  "author": "Kedar Sathe <kedarsathe49@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kedar49/lazydocs.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/commander": "^2.12.0",
+    "@types/inquirer": "^9.0.9",
+    "@types/jest": "^30.0.0",
+    "@types/marked": "^5.0.2",
+    "@types/node": "^24.7.0",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.4",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.28.4",
+    "commander": "^14.0.1",
+    "groq-sdk": "^0.33.0",
+    "handlebars": "^4.7.8",
+    "inquirer": "^12.9.6",
+    "marked": "^16.3.0",
+    "simple-git": "^3.28.0"
+  }
+}
