@@ -10,44 +10,49 @@ export async function generateReadme(
   apiKey: string,
   aiOptions?: AIOptions
 ) {
-  console.log('📊 Analyzing codebase...');
+  console.log('Analyzing codebase...');
   const analysis = analyzeCode(inputDir);
 
   console.log(`  Found ${analysis.fileCount} files, ${analysis.totalLines} lines`);
   console.log(`  Functions: ${analysis.functions.length}, Classes: ${analysis.classes.length}`);
 
-  console.log('🤖 Generating documentation sections...');
+  // Show compact summary if available
+  if (analysis.compactSummary) {
+    console.log('\nProject Structure:');
+    console.log(analysis.compactSummary.split('\n').map(l => `  ${l}`).join('\n'));
+  }
+
+  console.log('\nGenerating documentation...');
+
+  // Use compact summary for better token efficiency
+  const contextSnippet = analysis.compactSummary
+    ? `${analysis.compactSummary}\n\nCode samples:\n${analysis.snippets.slice(0, 4000)}`
+    : analysis.snippets;
 
   const overview = await generateDocSection(
-    analysis.snippets,
+    contextSnippet,
     'readme',
     apiKey,
-    'Generate a comprehensive project overview',
-    aiOptions
+    undefined,
+    aiOptions,
+    analysis.compactSummary
   );
 
   const usage = await generateDocSection(
-    analysis.snippets,
+    contextSnippet,
     'readme',
     apiKey,
-    'Generate usage examples with code snippets',
-    aiOptions
+    'Generate practical usage examples with code snippets showing how to use this project',
+    aiOptions,
+    analysis.compactSummary
   );
 
   // Generate API docs for top functions/classes (limit to avoid rate limits)
-  const topItems = [...analysis.functions, ...analysis.classes].slice(0, 10);
-  const apis = await Promise.all(
-    topItems.map(async (name) => ({
-      name,
-      desc: await generateDocSection(
-        analysis.snippets,
-        'readme',
-        apiKey,
-        `Describe the ${name} function/class briefly`,
-        aiOptions
-      ),
-    }))
-  );
+  const topItems = [...analysis.functions, ...analysis.classes].slice(0, 8);
+  const apis = topItems.map(name => ({
+    name,
+    desc: `${name} - Core functionality (see code for details)`,
+  }));
 
   // Try to read project name from package.json
   let projectName = 'Your Project';
@@ -75,6 +80,8 @@ export async function generateReadme(
       totalLines: analysis.totalLines,
       functions: analysis.functions.length,
       classes: analysis.classes.length,
+      totalSize: (analysis.totalSize / 1024).toFixed(1),
+      complexity: analysis.complexity.toFixed(1),
     },
   });
 

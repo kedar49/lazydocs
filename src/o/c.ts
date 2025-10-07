@@ -8,7 +8,7 @@ export async function generateChangelog(
   apiKey: string,
   aiOptions?: AIOptions
 ) {
-  console.log('📜 Analyzing git history...');
+  console.log('Analyzing git history...');
 
   const git = simpleGit(inputDir);
 
@@ -32,7 +32,7 @@ ${logs.all
 `;
 
     console.log(`  Analyzed ${logs.total} commits`);
-    console.log('🤖 Generating changelog...');
+    console.log('Generating changelog...');
 
     const changelog = await generateDocSection(snippet, 'changelog', apiKey, undefined, aiOptions);
 

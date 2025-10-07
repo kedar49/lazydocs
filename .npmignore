@@ -4,6 +4,9 @@ tests/
 *.test.ts
 *.spec.ts
 
+# Website
+web/
+
 # Development
 tsconfig.json
 jest.config.js

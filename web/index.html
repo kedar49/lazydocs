@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LazyDocs - AI Documentation Generator</title>
+    <meta name="description"
+        content="Stop writing docs. Let AI do it. Generate READMEs, PR descriptions, and changelogs instantly.">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i data-lucide="book-open" class="logo-icon"></i>
+                <span class="brand-name">LazyDocs</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features"><i data-lucide="sparkles"></i> Features</a>
+                <a href="#install"><i data-lucide="download"></i> Install</a>
+                <a href="https://github.com/kedar49/lazydocs" target="_blank"><i data-lucide="github"></i> GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">
+                <i data-lucide="zap"></i>
+                <span>Powered by Groq AI</span>
+            </div>
+            <h1 class="hero-title">
+                Stop writing docs.<br>
+                <span class="gradient-text">Let AI do it.</span>
+            </h1>
+            <p class="hero-subtitle">Generate professional documentation from your codebase in seconds using Groq's
+                lightning-fast AI.</p>
+            <div class="hero-cta">
+                <a href="#install" class="btn btn-primary">
+                    <i data-lucide="rocket"></i>
+                    <span>Get Started</span>
+                </a>
+                <a href="https://github.com/kedar49/lazydocs" class="btn btn-secondary" target="_blank">
+                    <i data-lucide="github"></i>
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+            <div class="hero-demo">
+                <div class="demo-header">
+                    <div class="demo-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span class="demo-title">Terminal</span>
+                </div>
+                <pre><code><span class="comment"># Install</span>
+npm install -g @tfkedar/lazydocs
+
+<span class="comment"># Configure</span>
+lazydocs config set GROQ_API_KEY=your_key
+
+<span class="comment"># Generate</span>
+lazydocs generate --interactive</code></pre>
+            </div>
+        </div>
+        <div class="hero-bg">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Features</span>
+                <h2 class="section-title">Why LazyDocs?</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="zap"></i>
+                    </div>
+                    <h3>Lightning Fast</h3>
+                    <p>Powered by Groq's LLM inference. Generate docs in seconds.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="brain"></i>
+                    </div>
+                    <h3>AI-Powered</h3>
+                    <p>Advanced language models understand your code and write professional docs.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="file-text"></i>
+                    </div>
+                    <h3>Multiple Formats</h3>
+                    <p>READMEs, PR descriptions, and changelogs from a single command.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="scan"></i>
+                    </div>
+                    <h3>Smart Analysis</h3>
+                    <p>Analyzes JS, TS, JSX, TSX files and understands your code structure.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="settings"></i>
+                    </div>
+                    <h3>Configurable</h3>
+                    <p>Choose models, adjust parameters, customize output to your needs.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-lucide="gift"></i>
+                    </div>
+                    <h3>Free to Use</h3>
+                    <p>Groq API is free. No credit card required to get started.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="install" class="install">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Installation</span>
+                <h2 class="section-title">Get Started in 4 Steps</h2>
+            </div>
+            <div class="install-steps">
+                <div class="step">
+                    <div class="step-number">
+                        <i data-lucide="download"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Install LazyDocs</h3>
+                        <div class="code-block">
+                            <button class="copy-btn" data-copy="npm install -g @tfkedar/lazydocs">
+                                <i data-lucide="copy"></i>
+                            </button>
+                            <pre><code>npm install -g @tfkedar/lazydocs</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">
+                        <i data-lucide="key"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Get API Key</h3>
+                        <p>Get your free API key from <a href="https://console.groq.com"
+                                target="_blank">console.groq.com <i data-lucide="external-link"></i></a></p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">
+                        <i data-lucide="settings"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Configure</h3>
+                        <div class="code-block">
+                            <button class="copy-btn" data-copy="lazydocs config set GROQ_API_KEY=your_key">
+                                <i data-lucide="copy"></i>
+                            </button>
+                            <pre><code>lazydocs config set GROQ_API_KEY=your_key</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">
+                        <i data-lucide="sparkles"></i>
+                    </div>
+                    <div class="step-content">
+                        <h3>Generate!</h3>
+                        <div class="code-block">
+                            <button class="copy-btn" data-copy="lazydocs generate --interactive">
+                                <i data-lucide="copy"></i>
+                            </button>
+                            <pre><code>lazydocs generate --interactive</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="examples">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Examples</span>
+                <h2 class="section-title">What You Can Generate</h2>
+            </div>
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="example-icon">
+                        <i data-lucide="book-open"></i>
+                    </div>
+                    <h3>README Files</h3>
+                    <p>Complete project documentation with overview, installation, usage, and API docs.</p>
+                    <div class="code-block">
+                        <pre><code>lazydocs generate --type readme</code></pre>
+                    </div>
+                </div>
+                <div class="example-card">
+                    <div class="example-icon">
+                        <i data-lucide="git-pull-request"></i>
+                    </div>
+                    <h3>PR Descriptions</h3>
+                    <p>Clear pull request descriptions from your git diff.</p>
+                    <div class="code-block">
+                        <pre><code>lazydocs generate --type pr</code></pre>
+                    </div>
+                </div>
+                <div class="example-card">
+                    <div class="example-icon">
+                        <i data-lucide="list"></i>
+                    </div>
+                    <h3>Changelogs</h3>
+                    <p>Formatted changelogs from your git commit history.</p>
+                    <div class="code-block">
+                        <pre><code>lazydocs generate --type changelog</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="models">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">AI Models</span>
+                <h2 class="section-title">Choose Your Model</h2>
+            </div>
+            <div class="models-grid">
+                <div class="model-card">
+                    <div class="model-badge default">Default</div>
+                    <div class="model-icon">
+                        <i data-lucide="cpu"></i>
+                    </div>
+                    <h3>llama-3.3-70b-versatile</h3>
+                    <p>Best quality, 131K context</p>
+                </div>
+                <div class="model-card">
+                    <div class="model-badge fastest">Fastest</div>
+                    <div class="model-icon">
+                        <i data-lucide="zap"></i>
+                    </div>
+                    <h3>llama-3.1-8b-instant</h3>
+                    <p>Lightning fast, 131K context</p>
+                </div>
+                <div class="model-card">
+                    <div class="model-badge openai">OpenAI</div>
+                    <div class="model-icon">
+                        <i data-lucide="sparkles"></i>
+                    </div>
+                    <h3>openai/gpt-oss-120b</h3>
+                    <p>OpenAI 120B, 131K context</p>
+                </div>
+                <div class="model-card">
+                    <div class="model-badge balanced">Balanced</div>
+                    <div class="model-icon">
+                        <i data-lucide="gauge"></i>
+                    </div>
+                    <h3>openai/gpt-oss-20b</h3>
+                    <p>OpenAI 20B, 131K context</p>
+                </div>
+            </div>
+            <div class="models-cta">
+                <div class="code-block">
+                    <pre><code>lazydocs models --refresh  <span class="comment"># See all available</span></code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-icon">
+                <i data-lucide="rocket"></i>
+            </div>
+            <h2>Ready to Stop Writing Docs?</h2>
+            <p>Join developers using LazyDocs to generate better documentation faster.</p>
+            <div class="cta-buttons">
+                <a href="https://www.npmjs.com/package/@tfkedar/lazydocs" class="btn btn-primary" target="_blank">
+                    <i data-lucide="download"></i>
+                    <span>Install Now</span>
+                </a>
+                <a href="https://github.com/kedar49/lazydocs" class="btn btn-secondary" target="_blank">
+                    <i data-lucide="github"></i>
+                    <span>View on GitHub</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i data-lucide="book-open"></i>
+                    <span>LazyDocs</span>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/kedar49/lazydocs" target="_blank">
+                        <i data-lucide="github"></i> GitHub
+                    </a>
+                    <a href="https://www.npmjs.com/package/@tfkedar/lazydocs" target="_blank">
+                        <i data-lucide="package"></i> NPM
+                    </a>
+                    <a href="https://github.com/kedar49/lazydocs/issues" target="_blank">
+                        <i data-lucide="bug"></i> Issues
+                    </a>
+                    <a href="https://console.groq.com" target="_blank">
+                        <i data-lucide="zap"></i> Groq
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Using <a href="https://groq.com" target="_blank">Groq Api</a> • Made by <a
+                        href="https://github.com/kedar49" target="_blank">@kedar49</a> • MIT License © 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
