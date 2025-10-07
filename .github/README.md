@@ -1,119 +1,182 @@
-# GitHub Configuration
+# LazyDocs
 
-This directory contains all GitHub-specific configuration files for LazyDocs.
+> Stop writing docs. Let AI do it.
 
-## 📁 Directory Structure
+[![npm](https://img.shields.io/npm/v/@tfkedar/lazydocs)](https://www.npmjs.com/package/@tfkedar/lazydocs)
+[![CI](https://github.com/kedar49/lazydocs/workflows/CI/badge.svg)](https://github.com/kedar49/lazydocs/actions)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-```
-.github/
-├── workflows/              # GitHub Actions workflows
-│   ├── ci.yml             # Continuous Integration
-│   ├── publish.yml        # NPM Publishing
-│   ├── docs.yml           # Auto-documentation
-│   ├── release.yml        # Release automation
-│   ├── codeql.yml         # Security scanning
-│   └── dependency-review.yml
-├── ISSUE_TEMPLATE/        # Issue templates
-│   ├── bug_report.md
-│   └── feature_request.md
-├── PULL_REQUEST_TEMPLATE.md
-├── dependabot.yml         # Dependency updates
-├── FUNDING.yml            # Sponsorship info
-└── WORKFLOWS.md           # Workflow documentation
-```
+LazyDocs uses Groq's lightning-fast AI to generate professional documentation from your codebase. READMEs, PR descriptions, changelogs—all in seconds.
 
-## 🚀 Workflows
+## Why LazyDocs?
 
-### Active Workflows
+- **Fast** - Powered by Groq's LLM inference (seriously fast)
+- **Smart** - Analyzes your actual code structure
+- **Easy** - Interactive CLI that just works
+- **Free** - Groq API is free to use
 
-1. **CI** - Tests on multiple platforms and Node versions
-2. **Publish** - Automated NPM publishing
-3. **Docs** - Auto-generate documentation
-4. **Release** - Create GitHub releases
-5. **CodeQL** - Security analysis
-6. **Dependency Review** - Check dependency security
+## Install
 
-See [WORKFLOWS.md](./WORKFLOWS.md) for detailed documentation.
-
-## 🔧 Setup Required
-
-### Secrets to Configure
-
-Add these in: Settings → Secrets and variables → Actions
-
-| Secret | Required | Purpose |
-|--------|----------|---------|
-| `NPM_TOKEN` | Yes (for publishing) | Publish to NPM |
-| `GROQ_API_KEY` | Optional | Auto-generate docs |
-
-### How to Get Secrets
-
-**NPM Token:**
 ```bash
-npm login
-npm token create
+npm install -g @tfkedar/lazydocs
 ```
 
-**Groq API Key:**
-Visit [console.groq.com](https://console.groq.com)
+## Setup
 
-## 📝 Templates
+Get a free API key from [console.groq.com](https://console.groq.com), then:
 
-### Issue Templates
-
-- **Bug Report** - Report bugs with structured format
-- **Feature Request** - Suggest new features
-
-### Pull Request Template
-
-Standardized PR format with checklist
-
-## 🤖 Dependabot
-
-Automated dependency updates:
-- **NPM packages** - Weekly on Mondays
-- **GitHub Actions** - Weekly on Mondays
-- Groups related updates
-- Auto-labels PRs
-
-## 📊 Badges
-
-Add to your README:
-
-```markdown
-![CI](https://github.com/kedar49/lazydocs/workflows/CI/badge.svg)
-![Publish](https://github.com/kedar49/lazydocs/workflows/Publish%20to%20NPM/badge.svg)
-![CodeQL](https://github.com/kedar49/lazydocs/workflows/CodeQL/badge.svg)
+```bash
+lazydocs config set GROQ_API_KEY=your_key_here
 ```
 
-## 🔒 Security
+## Use
 
-- **CodeQL** scans for vulnerabilities weekly
-- **Dependency Review** checks PRs for security issues
-- **Dependabot** keeps dependencies updated
+### Interactive Mode (Recommended)
 
-## 📚 Documentation
+```bash
+lazydocs generate --interactive
+```
 
-- [Workflows Documentation](./WORKFLOWS.md) - Detailed workflow guide
-- [Contributing Guide](../CONTRIBUTING.md) - How to contribute
-- [Changelog](../CHANGELOG.md) - Version history
+Walks you through everything. Pick what to generate, choose your model, done.
 
-## 🎯 Quick Start
+### Quick Commands
 
-1. **Fork the repository**
-2. **Configure secrets** (if publishing)
-3. **Enable workflows** in Actions tab
-4. **Create a PR** - workflows run automatically
+```bash
+# Generate README
+lazydocs generate --type readme
 
-## 💡 Tips
+# Generate PR description
+lazydocs generate --type pr
 
-- Test workflows on feature branches first
-- Review Dependabot PRs regularly
-- Keep CHANGELOG.md updated
-- Use semantic versioning for releases
+# Generate changelog from git history
+lazydocs generate --type changelog
+```
 
-## 🆘 Support
+### Advanced
 
-- Check [WORKFLOWS.md](./WORKFLOWS.md) for troubleshooting
-- Review workflow logs in Actions tab
-- Open an issue if you need help
+```bash
+lazydocs generate \
+  --type readme \
+  --input ./src \
+  --model llama-3.1-8b-instant \
+  --temperature 0.7 \
+  --verbose
+```
+
+## What It Does
+
+LazyDocs scans your code (JS, TS, JSX, TSX) and generates:
+
+- **READMEs** - Project overview, installation, usage, API docs
+- **PR Descriptions** - Summary of changes from git diff
+- **Changelogs** - Categorized release notes from commits
+
+## Models
+
+Choose your speed vs quality:
+
+- `llama-3.1-70b-versatile` - Best quality (default)
+- `llama-3.1-8b-instant` - Fastest
+- `mixtral-8x7b-32768` - Huge context window
+- `gemma2-9b-it` - Good balance
+
+```bash
+lazydocs models  # See all available
+```
+
+## Examples
+
+### Generate README for your project
+
+```bash
+cd my-awesome-project
+lazydocs generate --type readme
+```
+
+Creates `README.md` with:
+- Project overview
+- Installation steps
+- Usage examples
+- API documentation
+
+### Create PR description
+
+```bash
+git add .
+lazydocs generate --type pr --output PR.md
+```
+
+Analyzes your changes and writes a clear PR description.
+
+### Auto-generate changelog
+
+```bash
+lazydocs generate --type changelog
+```
+
+Reads your git history and creates a formatted changelog.
+
+## Configuration
+
+Config lives in `~/.lazydocs`:
+
+```bash
+# Set API key
+lazydocs config set GROQ_API_KEY=your_key
+
+# View all config
+lazydocs config list
+
+# Get specific value
+lazydocs config get GROQ_API_KEY
+```
+
+## Options
+
+```
+lazydocs generate [options]
+
+Options:
+  -i, --input <dir>       Code directory (default: "./src")
+  -o, --output <file>     Output file (auto-detected)
+  -t, --type <type>       readme | pr | changelog (default: "readme")
+  -m, --model <model>     AI model to use
+  --temperature <n>       Creativity 0-1 (default: 0.7)
+  --max-tokens <n>        Max response length (default: 2048)
+  --interactive           Interactive mode
+  --verbose               Show details
+  -h, --help              Show help
+```
+
+## Tips
+
+- Use `--interactive` for the easiest experience
+- Try different models—faster isn't always worse
+- Use `--verbose` to see what's happening
+- Works best with well-structured code
+
+## Requirements
+
+- Node.js 18 or higher
+- Free Groq API key
+
+## Contributing
+
+Found a bug? Want a feature? [Open an issue](https://github.com/kedar49/lazydocs/issues) or submit a PR.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+MIT © [Kedar Sathe](https://github.com/kedar49)
+
+## Links
+
+- [NPM Package](https://www.npmjs.com/package/@tfkedar/lazydocs)
+- [GitHub Repo](https://github.com/kedar49/lazydocs)
+- [Report Issues](https://github.com/kedar49/lazydocs/issues)
+- [Groq Console](https://console.groq.com)
+
+---
+
+Built with [Groq](https://groq.com) • Made by [@kedar49](https://github.com/kedar49)
