@@ -5,33 +5,56 @@ lucide.createIcons();
 const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
 const navLinks = document.querySelector('.nav-links');
 
-if (mobileMenuToggle) {
-    mobileMenuToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
+if (mobileMenuToggle && navLinks) {
+    const toggleMenu = (forceClose = false) => {
+        const isOpen = forceClose ? false : !navLinks.classList.contains('active');
         const icon = mobileMenuToggle.querySelector('i');
-        const isOpen = navLinks.classList.contains('active');
-        icon.setAttribute('data-lucide', isOpen ? 'x' : 'menu');
+
+        if (!icon) {
+            console.warn('Mobile menu icon not found');
+            return;
+        }
+
+        if (isOpen) {
+            navLinks.classList.add('active');
+            document.body.classList.add('menu-open');
+            icon.setAttribute('data-lucide', 'x');
+        } else {
+            navLinks.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            icon.setAttribute('data-lucide', 'menu');
+        }
+
+        // Re-initialize icons
         lucide.createIcons();
+    };
+
+    mobileMenuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu();
     });
 
-    // Close menu when clicking outside
+    // Close menu when clicking outside (on overlay)
     document.addEventListener('click', (e) => {
-        if (!e.target.closest('.navbar')) {
-            navLinks.classList.remove('active');
-            const icon = mobileMenuToggle.querySelector('i');
-            icon.setAttribute('data-lucide', 'menu');
-            lucide.createIcons();
+        if (navLinks.classList.contains('active') &&
+            !e.target.closest('.nav-links') &&
+            !e.target.closest('.mobile-menu-toggle')) {
+            toggleMenu(true);
         }
     });
 
     // Close menu when clicking a link
     navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
-            navLinks.classList.remove('active');
-            const icon = mobileMenuToggle.querySelector('i');
-            icon.setAttribute('data-lucide', 'menu');
-            lucide.createIcons();
+            toggleMenu(true);
         });
+    });
+
+    // Close menu on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+            toggleMenu(true);
+        }
     });
 }
 
@@ -106,7 +129,10 @@ document.querySelectorAll('pre code').forEach(block => {
     block.style.cursor = 'pointer';
     block.title = 'Click to copy';
 
-    block.addEventListener('click', async () => {
+    block.addEventListener('click', async (e) => {
+        // Don't copy if clicking on scrollbar
+        if (e.offsetX > block.offsetWidth) return;
+
         const text = block.textContent;
         try {
             await navigator.clipboard.writeText(text);
@@ -146,9 +172,31 @@ document.querySelectorAll('pre code').forEach(block => {
             }, 1500);
         } catch (err) {
             console.error('Failed to copy:', err);
+            // Fallback for older browsers
+            showCopyFallback();
         }
     });
 });
+
+// Fallback copy notification
+function showCopyFallback() {
+    const tooltip = document.createElement('div');
+    tooltip.textContent = 'Press Ctrl+C to copy';
+    tooltip.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--text);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        z-index: 1000;
+    `;
+    document.body.appendChild(tooltip);
+    setTimeout(() => tooltip.remove(), 2000);
+}
 
 // Parallax effect for hero blobs (only on desktop)
 let mouseX = 0;
