@@ -51,7 +51,7 @@
   "dependencies": {
     "@babel/parser": "^7.28.4",
     "commander": "^14.0.1",
-    "groq-sdk": "^0.33.0",
+    "groq-sdk": "^0.34.0",
     "handlebars": "^4.7.8",
     "inquirer": "^12.9.6",
     "simple-git": "^3.28.0"
