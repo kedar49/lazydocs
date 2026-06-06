@@ -4,4 +4,5 @@ module.exports = {
   testTimeout: 10000,
   forceExit: true,
   clearMocks: true,
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
 };

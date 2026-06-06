@@ -2,20 +2,32 @@ import * as fs from 'fs';
 import simpleGit from 'simple-git';
 import { generateDocSection, AIOptions } from '../ai';
 
+// Generate professional pull request description from git diff
 export async function generatePrDesc(
   inputDir: string,
   outputFile: string,
   apiKey: string,
-  aiOptions?: AIOptions
+  aiOptions?: AIOptions,
+  gitOptions?: { base?: string; head?: string }
 ) {
   console.log('Analyzing git changes...');
 
   const git = simpleGit(inputDir);
 
   try {
+    const diffArgs: string[] = [];
+    if (gitOptions?.base) {
+      if (gitOptions.head) {
+        diffArgs.push(`${gitOptions.base}...${gitOptions.head}`);
+      } else {
+        diffArgs.push(gitOptions.base);
+      }
+      console.log(`  Comparing: ${diffArgs[0]}`);
+    }
+
     // Get diff summary with compact format
-    const diff = await git.diffSummary();
-    const diffText = await git.diff();
+    const diff = await git.diffSummary(diffArgs);
+    const diffText = await git.diff(diffArgs);
 
     const fileChanges = diff.files.map((f) => {
       const ins = 'insertions' in f ? (f.insertions as number) : 0;

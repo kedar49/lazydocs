@@ -9,6 +9,7 @@ import { generateChangelog } from './o/c';
 import { getAvailableModels, getFallbackModels, getDefaultModel } from './ai';
 import { getConfig, setConfig, getConfigValue, listConfig, deleteConfig } from './utils/config-manager';
 
+// Helper to log errors locally
 const logError = (message: string) => {
   const logDir = path.join(process.cwd(), 'logs');
   if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
@@ -115,6 +116,9 @@ program
   .option('--max-tokens <tokens>', 'Maximum tokens', parseInt, 2048)
   .option('--interactive', 'Interactive mode')
   .option('--verbose', 'Verbose output')
+  .option('--template <path>', 'Custom Handlebars template file path')
+  .option('--base <branch>', 'Base branch for PR diff comparison')
+  .option('--head <branch>', 'Head branch for PR diff comparison')
   .action(async (options) => {
     try {
       const startTime = Date.now();
@@ -227,9 +231,10 @@ program
 
       // Generate
       if (options.type === 'readme') {
-        await generateReadme(options.input, options.output, apiKey, aiOptions);
+        await generateReadme(options.input, options.output, apiKey, aiOptions, options.template);
       } else if (options.type === 'pr') {
-        await generatePrDesc(options.input, options.output, apiKey, aiOptions);
+        const gitOptions = { base: options.base, head: options.head };
+        await generatePrDesc(options.input, options.output, apiKey, aiOptions, gitOptions);
       } else if (options.type === 'changelog') {
         await generateChangelog(options.input, options.output, apiKey, aiOptions);
       } else {
@@ -309,7 +314,7 @@ program
   .action(async (options) => {
     try {
       if (options.refresh) {
-        let apiKey: string;
+        let apiKey = '';
         try {
           const config = getConfig({}, true);
           apiKey = config.GROQ_API_KEY;

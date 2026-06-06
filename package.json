@@ -1,12 +1,13 @@
 {
-  "name": "@tfkedar/lazydocs",
-  "version": "1.2.1",
+  "name": "@lazykedar/lazydocs",
+  "version": "1.3.0",
   "description": "AI-powered documentation generator using Groq. Generate READMEs, PR descriptions, and changelogs in seconds.",
   "main": "dist/index.js",
   "bin": {
     "lazydocs": "./dist/cli.js"
   },
   "scripts": {
+    "start": "npx -y serve web",
     "build": "tsc && npm run copy-templates",
     "copy-templates": "node -e \"const fs=require('fs');const path=require('path');const src='src/t';const dest='dist/t';if(!fs.existsSync(dest))fs.mkdirSync(dest,{recursive:true});fs.readdirSync(src).forEach(f=>{if(f.endsWith('.hbs'))fs.copyFileSync(path.join(src,f),path.join(dest,f))})\"",
     "test": "jest",

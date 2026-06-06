@@ -3,12 +3,15 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { generateDocSection, AIOptions } from '../ai';
 import { analyzeCode } from '../a';
+import { mergeContent } from '../utils/merger';
 
+// Generate README markdown file by analyzing the codebase
 export async function generateReadme(
   inputDir: string,
   outputFile: string,
   apiKey: string,
-  aiOptions?: AIOptions
+  aiOptions?: AIOptions,
+  customTemplatePath?: string
 ) {
   console.log('Analyzing codebase...');
   const analysis = analyzeCode(inputDir);
@@ -67,8 +70,14 @@ export async function generateReadme(
   }
 
   // Load template
-  const templatePath = path.join(__dirname, '../t/r.hbs');
-  const template = handlebars.compile(fs.readFileSync(templatePath, 'utf-8'));
+  const resolvedTemplatePath = customTemplatePath 
+    ? path.resolve(process.cwd(), customTemplatePath)
+    : path.join(__dirname, '../t/r.hbs');
+  
+  if (!fs.existsSync(resolvedTemplatePath)) {
+    throw new Error(`Template file not found: ${resolvedTemplatePath}`);
+  }
+  const template = handlebars.compile(fs.readFileSync(resolvedTemplatePath, 'utf-8'));
 
   const content = template({
     projectName,
@@ -85,5 +94,15 @@ export async function generateReadme(
     },
   });
 
-  fs.writeFileSync(outputFile, content);
+  let finalContent = content;
+  if (fs.existsSync(outputFile)) {
+    try {
+      const existingContent = fs.readFileSync(outputFile, 'utf-8');
+      finalContent = mergeContent(existingContent, content);
+    } catch (error) {
+      console.warn(`Failed to merge content, overwriting instead: ${(error as Error).message}`);
+    }
+  }
+
+  fs.writeFileSync(outputFile, finalContent);
 }

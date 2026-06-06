@@ -1,0 +1,10 @@
+{
+  "name": "lazydocs-web",
+  "version": "1.2.1",
+  "description": "LazyDocs website local development server",
+  "private": true,
+  "scripts": {
+    "start": "npx -y serve .",
+    "dev": "npx -y serve ."
+  }
+}

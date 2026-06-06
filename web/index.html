@@ -4,33 +4,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <meta name="theme-color" content="#FF6B6B">
+    <meta name="theme-color" content="#FF5858">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>LazyDocs - AI Documentation Generator</title>
     <meta name="description"
         content="Stop writing docs. Let AI do it. Generate READMEs, PR descriptions, and changelogs instantly.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="styles.css">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
+    <!-- Ambient Aurora Glows -->
+    <div class="aurora-container">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+        <div class="glow glow-3"></div>
+    </div>
+
     <nav class="navbar">
         <div class="container">
-            <div class="nav-brand">
+            <a href="#" class="nav-brand">
                 <i data-lucide="book-open" class="logo-icon"></i>
                 <span class="brand-name">LazyDocs</span>
-            </div>
+            </a>
             <button class="mobile-menu-toggle" aria-label="Toggle menu">
                 <i data-lucide="menu"></i>
             </button>
             <div class="nav-links">
                 <a href="#features"><i data-lucide="sparkles"></i> <span>Features</span></a>
-                <a href="#install"><i data-lucide="download"></i> <span>Install</span></a>
-                <a href="https://github.com/kedar49/lazydocs" target="_blank"><i data-lucide="github"></i>
-                    <span>GitHub</span></a>
+                <a href="#install"><i data-lucide="terminal"></i> <span>Interactive Command Builder</span></a>
+                <a href="#preview"><i data-lucide="file-text"></i> <span>Output Previews</span></a>
+                <a href="https://github.com/kedar49/lazydocs" target="_blank" class="github-link">
+                    <i data-lucide="github"></i> <span>GitHub</span>
+                </a>
             </div>
         </div>
     </nav>
@@ -38,98 +53,96 @@
     <section class="hero">
         <div class="container">
             <div class="hero-badge">
-                <i data-lucide="zap"></i>
-                <span>Powered by Groq AI</span>
+                <i data-lucide="zap" class="pulse-icon"></i>
+                <span>Powered by Groq Cloud API</span>
             </div>
             <h1 class="hero-title">
                 Stop writing docs.<br>
                 <span class="gradient-text">Let AI do it.</span>
             </h1>
-            <p class="hero-subtitle">Generate professional documentation from your codebase in seconds using Groq's
-                lightning-fast AI.</p>
+            <p class="hero-subtitle">Generate professional, high-fidelity codebase documentation in seconds using Groq's lightning-fast inference models.</p>
             <div class="hero-cta">
                 <a href="#install" class="btn btn-primary">
                     <i data-lucide="rocket"></i>
-                    <span>Get Started</span>
+                    <span>Try Command Builder</span>
                 </a>
                 <a href="https://github.com/kedar49/lazydocs" class="btn btn-secondary" target="_blank">
                     <i data-lucide="github"></i>
-                    <span>View on GitHub</span>
+                    <span>GitHub Repository</span>
                 </a>
             </div>
-            <div class="hero-demo">
-                <div class="demo-header">
-                    <div class="demo-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+            
+            <!-- Terminal Simulator Panel -->
+            <div class="hero-demo-wrapper">
+                <div class="terminal-panel">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <span class="terminal-title">lazydocs --interactive</span>
+                        <div class="terminal-actions">
+                            <span class="terminal-status-dot"></span>
+                            <span class="terminal-status-text">Connected</span>
+                        </div>
                     </div>
-                    <span class="demo-title">Terminal</span>
+                    <div class="terminal-body" id="terminal-simulator">
+                        <!-- Content will be dynamically inserted by script.js -->
+                    </div>
                 </div>
-                <pre><code><span class="comment"># Install</span>
-npm install -g @tfkedar/lazydocs
-
-<span class="comment"># Configure</span>
-lazydocs config set GROQ_API_KEY=your_key
-
-<span class="comment"># Generate</span>
-lazydocs generate --interactive</code></pre>
             </div>
-        </div>
-        <div class="hero-bg">
-            <div class="blob blob-1"></div>
-            <div class="blob blob-2"></div>
         </div>
     </section>
 
     <section id="features" class="features">
         <div class="container">
             <div class="section-header">
-                <span class="section-badge">Features</span>
-                <h2 class="section-title">Why LazyDocs?</h2>
+                <span class="section-badge">Capabilities</span>
+                <h2 class="section-title">Why Developers Choose LazyDocs</h2>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
                         <i data-lucide="zap"></i>
                     </div>
-                    <h3>Lightning Fast</h3>
-                    <p>Powered by Groq's LLM inference. Generate docs in seconds.</p>
+                    <h3>Sub-Second Inference</h3>
+                    <p>Leverages Groq LLaMA models for instantaneous documentation generation in seconds.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i data-lucide="brain"></i>
+                        <i data-lucide="git-merge"></i>
                     </div>
-                    <h3>AI-Powered</h3>
-                    <p>Advanced language models understand your code and write professional docs.</p>
+                    <h3>Smart Merging</h3>
+                    <p>Updates documentation within HTML comment anchors, leaving manual customization completely intact.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i data-lucide="file-text"></i>
+                        <i data-lucide="layout"></i>
                     </div>
-                    <h3>Multiple Formats</h3>
-                    <p>READMEs, PR descriptions, and changelogs from a single command.</p>
+                    <h3>Custom Templates</h3>
+                    <p>Load bespoke Handlebars templates with standard variables to format document structures.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i data-lucide="scan"></i>
+                        <i data-lucide="git-branch"></i>
                     </div>
-                    <h3>Smart Analysis</h3>
-                    <p>Analyzes JS, TS, JSX, TSX files and understands your code structure.</p>
+                    <h3>Branch Comparisons</h3>
+                    <p>Compare branch diffs (e.g. <code>base...head</code>) to automatically write detailed pull requests descriptions.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i data-lucide="settings"></i>
+                        <i data-lucide="terminal"></i>
                     </div>
-                    <h3>Configurable</h3>
-                    <p>Choose models, adjust parameters, customize output to your needs.</p>
+                    <h3>Zero Config Setup</h3>
+                    <p>Interactive CLI wizard auto-detects dependencies and configuration values in seconds.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i data-lucide="gift"></i>
+                        <i data-lucide="shield-check"></i>
                     </div>
-                    <h3>Free to Use</h3>
-                    <p>Groq API is free. No credit card required to get started.</p>
+                    <h3>Extremely Robust</h3>
+                    <p>Complete retry handling with exponential backoff logic and type-checked parsing under the hood.</p>
                 </div>
             </div>
         </div>
@@ -138,59 +151,91 @@ lazydocs generate --interactive</code></pre>
     <section id="install" class="install">
         <div class="container">
             <div class="section-header">
-                <span class="section-badge">Installation</span>
-                <h2 class="section-title">Get Started in 4 Steps</h2>
+                <span class="section-badge">Command Builder</span>
+                <h2 class="section-title">Configure & Install</h2>
             </div>
-            <div class="install-steps">
-                <div class="step">
-                    <div class="step-number">
-                        <i data-lucide="download"></i>
+            <div class="builder-grid">
+                <!-- Left: Standard setup steps -->
+                <div class="steps-column">
+                    <div class="step-card">
+                        <div class="step-badge">1</div>
+                        <div class="step-details">
+                            <h3>Install Globally</h3>
+                            <div class="code-box">
+                                <pre><code>npm install -g @lazykedar/lazydocs</code></pre>
+                                <button class="copy-box-btn" data-copy="npm install -g @lazykedar/lazydocs" aria-label="Copy code">
+                                    <i data-lucide="copy"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="step-content">
-                        <h3>Install LazyDocs</h3>
-                        <div class="code-block">
-                            <button class="copy-btn" data-copy="npm install -g @tfkedar/lazydocs">
-                                <i data-lucide="copy"></i>
-                            </button>
-                            <pre><code>npm install -g @tfkedar/lazydocs</code></pre>
+                    <div class="step-card">
+                        <div class="step-badge">2</div>
+                        <div class="step-details">
+                            <h3>Set Groq API Key</h3>
+                            <div class="code-box">
+                                <pre><code>lazydocs config set GROQ_API_KEY=gsk_...</code></pre>
+                                <button class="copy-box-btn" data-copy="lazydocs config set GROQ_API_KEY=your_key" aria-label="Copy code">
+                                    <i data-lucide="copy"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="step">
-                    <div class="step-number">
-                        <i data-lucide="key"></i>
-                    </div>
-                    <div class="step-content">
-                        <h3>Get API Key</h3>
-                        <p>Get your free API key from <a href="https://console.groq.com"
-                                target="_blank">console.groq.com <i data-lucide="external-link"></i></a></p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">
-                        <i data-lucide="settings"></i>
-                    </div>
-                    <div class="step-content">
-                        <h3>Configure</h3>
-                        <div class="code-block">
-                            <button class="copy-btn" data-copy="lazydocs config set GROQ_API_KEY=your_key">
-                                <i data-lucide="copy"></i>
-                            </button>
-                            <pre><code>lazydocs config set GROQ_API_KEY=your_key</code></pre>
+
+                <!-- Right: Interactive CLI command builder widget -->
+                <div class="builder-column">
+                    <div class="builder-card">
+                        <div class="builder-header">
+                            <i data-lucide="settings-2"></i>
+                            <h3>Interactive Command Builder</h3>
                         </div>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">
-                        <i data-lucide="sparkles"></i>
-                    </div>
-                    <div class="step-content">
-                        <h3>Generate!</h3>
-                        <div class="code-block">
-                            <button class="copy-btn" data-copy="lazydocs generate --interactive">
-                                <i data-lucide="copy"></i>
-                            </button>
-                            <pre><code>lazydocs generate --interactive</code></pre>
+                        <div class="builder-body">
+                            <!-- Option: Document Type -->
+                            <div class="option-group">
+                                <label>Document Type (-t, --type)</label>
+                                <div class="option-selectors" id="builder-type-selectors">
+                                    <button class="selector-btn active" data-value="readme">README.md</button>
+                                    <button class="selector-btn" data-value="pr">PR Description</button>
+                                    <button class="selector-btn" data-value="changelog">Changelog</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Option: Model Choice -->
+                            <div class="option-group">
+                                <label>AI Model (-m, --model)</label>
+                                <div class="option-selectors" id="builder-model-selectors">
+                                    <button class="selector-btn active" data-value="llama-3.3-70b-versatile">Llama 3.3 (Quality)</button>
+                                    <button class="selector-btn" data-value="llama-3.1-8b-instant">Llama 3.1 (Fast)</button>
+                                    <button class="selector-btn" data-value="mixtral-8x7b-32768">Mixtral</button>
+                                </div>
+                            </div>
+
+                            <!-- Contextual Git Branch Inputs (Only visible for PR type) -->
+                            <div class="option-group hidden" id="branch-inputs-group">
+                                <label>PR Branches Comparison</label>
+                                <div class="branch-inputs">
+                                    <input type="text" id="builder-base-input" placeholder="Base branch (e.g. main)" />
+                                    <input type="text" id="builder-head-input" placeholder="Head branch (optional)" />
+                                </div>
+                            </div>
+
+                            <!-- Contextual Template Input (Only visible for README type) -->
+                            <div class="option-group" id="template-input-group">
+                                <label>Custom Template Path (--template)</label>
+                                <input type="text" id="builder-template-input" placeholder="Custom template path (e.g. ./my-template.hbs)" />
+                            </div>
+
+                            <!-- Generated Command Output Box -->
+                            <div class="command-box">
+                                <div class="command-label">Generated CLI Command:</div>
+                                <div class="command-display-wrapper">
+                                    <code id="command-output">lazydocs generate</code>
+                                    <button class="command-copy-btn" id="btn-copy-command" aria-label="Copy generated command">
+                                        <i data-lucide="copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -198,140 +243,197 @@ lazydocs generate --interactive</code></pre>
         </div>
     </section>
 
-    <section class="examples">
+    <!-- Preview notebook section -->
+    <section id="preview" class="previews">
         <div class="container">
             <div class="section-header">
-                <span class="section-badge">Examples</span>
-                <h2 class="section-title">What You Can Generate</h2>
+                <span class="section-badge">Live Demos</span>
+                <h2 class="section-title">Interactive Outputs</h2>
             </div>
-            <div class="examples-grid">
-                <div class="example-card">
-                    <div class="example-icon">
-                        <i data-lucide="book-open"></i>
-                    </div>
-                    <h3>README Files</h3>
-                    <p>Complete project documentation with overview, installation, usage, and API docs.</p>
-                    <div class="code-block">
-                        <pre><code>lazydocs generate --type readme</code></pre>
-                    </div>
+            
+            <!-- Tabbed Notebook Panel -->
+            <div class="notebook-panel">
+                <div class="notebook-tabs">
+                    <button class="tab-btn active" data-target="tab-readme">
+                        <i data-lucide="book-open"></i> <span>README.md</span>
+                    </button>
+                    <button class="tab-btn" data-target="tab-pr">
+                        <i data-lucide="git-pull-request"></i> <span>PR_DESCRIPTION.md</span>
+                    </button>
+                    <button class="tab-btn" data-target="tab-changelog">
+                        <i data-lucide="history"></i> <span>CHANGELOG.md</span>
+                    </button>
                 </div>
-                <div class="example-card">
-                    <div class="example-icon">
-                        <i data-lucide="git-pull-request"></i>
+                
+                <div class="notebook-body">
+                    <!-- Tab Panel: README -->
+                    <div class="tab-content active" id="tab-readme">
+                        <div class="notebook-grid">
+                            <div class="notebook-sidebar">
+                                <h4>Configuration</h4>
+                                <div class="meta-tag">Incremental updates: <span class="badge success">Enabled</span></div>
+                                <div class="meta-tag">Code Analysis: <span class="badge">TypeScript & Node</span></div>
+                                <p>Generates rich summaries, code usage walkthroughs, auto-calculated complexity stats, and API parameter tables.</p>
+                            </div>
+                            <div class="notebook-code-viewer">
+                                <div class="viewer-header">
+                                    <span class="filename">README.md</span>
+                                    <button class="notebook-copy-btn" data-copy-id="content-readme"><i data-lucide="copy"></i></button>
+                                </div>
+                                <pre><code id="content-readme"># @lazykedar/lazydocs
+
+## 📋 Overview
+<!-- lazydocs:start:overview -->
+LazyDocs is a high-performance, developer-native Node CLI designed to automate documentation maintenance. By scanning code AST structures and generating documentation via Groq's high-speed LLaMA models, it ensures your project files are always accurate and readable.
+<!-- lazydocs:end:overview -->
+
+## 📊 Project Statistics
+<!-- lazydocs:start:stats -->
+- **Files analyzed:** 14
+- **Total lines of code:** 1,280
+- **Total size:** 48.6 KB
+- **Functions:** 26
+- **Classes:** 4
+- **Avg complexity:** 2.4
+<!-- lazydocs:end:stats -->
+
+## 🚀 Installation
+```bash
+npm install @lazykedar/lazydocs
+```
+
+## 💡 Usage
+<!-- lazydocs:start:usage -->
+Run the generator directly targeting your source folder:
+```bash
+lazydocs generate --input ./src --output README.md
+```
+<!-- lazydocs:end:usage -->
+
+## 📚 API Reference
+<!-- lazydocs:start:api -->
+| Function/Class | Description |
+|----------------|-------------|
+| `analyzeCode` | Parse directory, calculate complexity, and build outlines |
+| `generateReadme` | Fetch template variables and run handlebar compile outputs |
+<!-- lazydocs:end:api --></code></pre>
+                            </div>
+                        </div>
                     </div>
-                    <h3>PR Descriptions</h3>
-                    <p>Clear pull request descriptions from your git diff.</p>
-                    <div class="code-block">
-                        <pre><code>lazydocs generate --type pr</code></pre>
+
+                    <!-- Tab Panel: PR Description -->
+                    <div class="tab-content" id="tab-pr">
+                        <div class="notebook-grid">
+                            <div class="notebook-sidebar">
+                                <h4>Configuration</h4>
+                                <div class="meta-tag">Branch range: <span class="badge accent">main...feat/login</span></div>
+                                <p>Generates detailed pull request summaries by parsing git commit messages and diff statistics between base and head branches.</p>
+                            </div>
+                            <div class="notebook-code-viewer">
+                                <div class="viewer-header">
+                                    <span class="filename">PR_DESCRIPTION.md</span>
+                                    <button class="notebook-copy-btn" data-copy-id="content-pr"><i data-lucide="copy"></i></button>
+                                </div>
+                                <pre><code id="content-pr">## Summary
+This pull request introduces standard OAuth authentication endpoints using Groq API keys and config-manager helpers, adding validation schemas and dynamic route handlers.
+
+## Changes Made
+- **Authentication Handlers**: Added `auth-handler.ts` containing token checking routines.
+- **Config Storage**: Added helper checks in `config-manager.ts` to validate keys before storage.
+- **CLI Options**: Added `--auth` options to the global generate module command.
+
+## Impact
+- Type-safe session states.
+- 0 breaking changes to existing config getters.
+
+## Testing
+- Staged integrations verified via Jest. Run `npm run test` to verify.</code></pre>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="example-card">
-                    <div class="example-icon">
-                        <i data-lucide="list"></i>
-                    </div>
-                    <h3>Changelogs</h3>
-                    <p>Formatted changelogs from your git commit history.</p>
-                    <div class="code-block">
-                        <pre><code>lazydocs generate --type changelog</code></pre>
+
+                    <!-- Tab Panel: Changelog -->
+                    <div class="tab-content" id="tab-changelog">
+                        <div class="notebook-grid">
+                            <div class="notebook-sidebar">
+                                <h4>Configuration</h4>
+                                <div class="meta-tag">Release Version: <span class="badge secondary">v1.2.0</span></div>
+                                <p>Pulls conventional git commit history logs, aggregates related commits, and builds release changelogs using semantic guidelines.</p>
+                            </div>
+                            <div class="notebook-code-viewer">
+                                <div class="viewer-header">
+                                    <span class="filename">CHANGELOG.md</span>
+                                    <button class="notebook-copy-btn" data-copy-id="content-changelog"><i data-lucide="copy"></i></button>
+                                </div>
+                                <pre><code id="content-changelog"># Changelog
+
+## [1.2.0] - 2026-06-06
+
+### 🚀 Features
+- **Smart Merging**: Added HTML comment anchors to prevent overriding manual modifications.
+- **Custom Templates**: Added option to pass customized `.hbs` files.
+- **PR Branch Comparison**: Compare branch ranges in PR generator.
+
+### 🔧 Maintenance
+- **TS Configurations**: Explicitly added node typings and skipLibCheck to compilation targets.
+- **Jest Improvements**: Configured tests to ignore output distribution folders.
+
+---
+*Generated by LazyDocs*</code></pre>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="models">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-badge">AI Models</span>
-                <h2 class="section-title">Choose Your Model</h2>
-            </div>
-            <div class="models-grid">
-                <div class="model-card">
-                    <div class="model-badge default">Default</div>
-                    <div class="model-icon">
-                        <i data-lucide="cpu"></i>
-                    </div>
-                    <h3>llama-3.3-70b-versatile</h3>
-                    <p>Best quality, 131K context</p>
-                </div>
-                <div class="model-card">
-                    <div class="model-badge fastest">Fastest</div>
-                    <div class="model-icon">
-                        <i data-lucide="zap"></i>
-                    </div>
-                    <h3>llama-3.1-8b-instant</h3>
-                    <p>Lightning fast, 131K context</p>
-                </div>
-                <div class="model-card">
-                    <div class="model-badge openai">OpenAI</div>
-                    <div class="model-icon">
-                        <i data-lucide="sparkles"></i>
-                    </div>
-                    <h3>openai/gpt-oss-120b</h3>
-                    <p>OpenAI 120B, 131K context</p>
-                </div>
-                <div class="model-card">
-                    <div class="model-badge balanced">Balanced</div>
-                    <div class="model-icon">
-                        <i data-lucide="gauge"></i>
-                    </div>
-                    <h3>openai/gpt-oss-20b</h3>
-                    <p>OpenAI 20B, 131K context</p>
-                </div>
-            </div>
-            <div class="models-cta">
-                <div class="code-block">
-                    <pre><code>lazydocs models --refresh  <span class="comment"># See all available</span></code></pre>
-                </div>
-            </div>
-        </div>
-    </section>
-
+    <!-- Sleek CTA -->
     <section class="cta-section">
         <div class="container">
-            <div class="cta-icon">
-                <i data-lucide="rocket"></i>
-            </div>
-            <h2>Ready to Stop Writing Docs?</h2>
-            <p>Join developers using LazyDocs to generate better documentation faster.</p>
-            <div class="cta-buttons">
-                <a href="https://www.npmjs.com/package/@tfkedar/lazydocs" class="btn btn-primary" target="_blank">
-                    <i data-lucide="download"></i>
-                    <span>Install Now</span>
-                </a>
-                <a href="https://github.com/kedar49/lazydocs" class="btn btn-secondary" target="_blank">
-                    <i data-lucide="github"></i>
-                    <span>View on GitHub</span>
-                </a>
+            <div class="cta-card">
+                <div class="cta-badge"><i data-lucide="rocket"></i> Get Started</div>
+                <h2>Stop Writing Docs Manually</h2>
+                <p>Integrate LazyDocs into your local workspace and watch your codebase documentation maintain itself.</p>
+                <div class="cta-buttons">
+                    <a href="https://www.npmjs.com/package/@lazykedar/lazydocs" class="btn btn-primary" target="_blank">
+                        <i data-lucide="package"></i>
+                        <span>NPM Package</span>
+                    </a>
+                    <a href="https://github.com/kedar49/lazydocs" class="btn btn-secondary" target="_blank">
+                        <i data-lucide="github"></i>
+                        <span>Star on GitHub</span>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <i data-lucide="book-open"></i>
-                    <span>LazyDocs</span>
+            <div class="footer-grid">
+                <div class="footer-brand-side">
+                    <div class="footer-logo">
+                        <i data-lucide="book-open"></i>
+                        <span>LazyDocs</span>
+                    </div>
+                    <p>AI-powered documentation engine built for speed, safety, and modern developer workflows.</p>
                 </div>
-                <div class="footer-links">
-                    <a href="https://github.com/kedar49/lazydocs" target="_blank">
-                        <i data-lucide="github"></i> GitHub
-                    </a>
-                    <a href="https://www.npmjs.com/package/@tfkedar/lazydocs" target="_blank">
-                        <i data-lucide="package"></i> NPM
-                    </a>
-                    <a href="https://github.com/kedar49/lazydocs/issues" target="_blank">
-                        <i data-lucide="bug"></i> Issues
-                    </a>
-                    <a href="https://console.groq.com" target="_blank">
-                        <i data-lucide="zap"></i> Groq
-                    </a>
+                <div class="footer-links-side">
+                    <div class="links-group">
+                        <h5>Project</h5>
+                        <a href="https://github.com/kedar49/lazydocs" target="_blank"><i data-lucide="github"></i> GitHub</a>
+                        <a href="https://www.npmjs.com/package/@lazykedar/lazydocs" target="_blank"><i data-lucide="package"></i> NPM Registry</a>
+                    </div>
+                    <div class="links-group">
+                        <h5>Developer</h5>
+                        <a href="https://github.com/kedar49" target="_blank"><i data-lucide="user"></i> @kedar49</a>
+                        <a href="https://console.groq.com" target="_blank"><i data-lucide="zap"></i> Groq Console</a>
+                    </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>Using <a href="https://groq.com" target="_blank">Groq Api</a> • Made by <a
-                        href="https://github.com/kedar49" target="_blank">@kedar49</a> • MIT License © 2025</p>
+                <p>Licensed under MIT License • &copy; 2026 LazyDocs. All rights reserved.</p>
             </div>
         </div>
     </footer>

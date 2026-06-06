@@ -1,8 +1,11 @@
 # {{projectName}}
 
 ## 📋 Overview
+<!-- lazydocs:start:overview -->
 {{{overview}}}
+<!-- lazydocs:end:overview -->
 
+<!-- lazydocs:start:stats -->
 {{#if stats}}
 ## 📊 Project Statistics
 - **Files analyzed:** {{stats.fileCount}}
@@ -12,6 +15,7 @@
 - **Classes:** {{stats.classes}}
 - **Avg complexity:** {{stats.complexity}}
 {{/if}}
+<!-- lazydocs:end:stats -->
 
 ## 🚀 Installation
 
@@ -20,8 +24,11 @@ npm install {{projectName}}
 ```
 
 ## 💡 Usage
+<!-- lazydocs:start:usage -->
 {{{usage}}}
+<!-- lazydocs:end:usage -->
 
+<!-- lazydocs:start:api -->
 {{#if apis.length}}
 ## 📚 API Reference
 
@@ -31,6 +38,7 @@ npm install {{projectName}}
 | `{{name}}` | {{{desc}}} |
 {{/each}}
 {{/if}}
+<!-- lazydocs:end:api -->
 
 ## 🤝 Contributing
 

@@ -23,12 +23,12 @@ Copy and paste these badges into your README.md
 
 ### NPM Version
 ```markdown
-[![npm version](https://img.shields.io/npm/v/@tfkedar/lazydocs)](https://www.npmjs.com/package/@tfkedar/lazydocs)
+[![npm version](https://img.shields.io/npm/v/@lazykedar/lazydocs)](https://www.npmjs.com/package/@lazykedar/lazydocs)
 ```
 
 ### NPM Downloads
 ```markdown
-[![Downloads](https://img.shields.io/npm/dm/@tfkedar/lazydocs)](https://www.npmjs.com/package/@tfkedar/lazydocs)
+[![Downloads](https://img.shields.io/npm/dm/@lazykedar/lazydocs)](https://www.npmjs.com/package/@lazykedar/lazydocs)
 ```
 
 ### License
@@ -38,7 +38,7 @@ Copy and paste these badges into your README.md
 
 ### Node Version
 ```markdown
-[![Node.js Version](https://img.shields.io/node/v/@tfkedar/lazydocs)](https://nodejs.org)
+[![Node.js Version](https://img.shields.io/node/v/@lazykedar/lazydocs)](https://nodejs.org)
 ```
 
 ## Quality Badges
@@ -55,7 +55,7 @@ Copy and paste these badges into your README.md
 
 ### Bundle Size
 ```markdown
-[![Bundle Size](https://img.shields.io/bundlephobia/min/@tfkedar/lazydocs)](https://bundlephobia.com/package/@tfkedar/lazydocs)
+[![Bundle Size](https://img.shields.io/bundlephobia/min/@lazykedar/lazydocs)](https://bundlephobia.com/package/@lazykedar/lazydocs)
 ```
 
 ## Social Badges
@@ -75,11 +75,11 @@ Copy and paste these badges into your README.md
 ```markdown
 # LazyDocs
 
-[![npm version](https://img.shields.io/npm/v/@tfkedar/lazydocs)](https://www.npmjs.com/package/@tfkedar/lazydocs)
+[![npm version](https://img.shields.io/npm/v/@lazykedar/lazydocs)](https://www.npmjs.com/package/@lazykedar/lazydocs)
 [![CI](https://github.com/kedar49/lazydocs/workflows/CI/badge.svg)](https://github.com/kedar49/lazydocs/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/kedar49/lazydocs/workflows/CodeQL/badge.svg)](https://github.com/kedar49/lazydocs/actions/workflows/codeql.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js Version](https://img.shields.io/node/v/@tfkedar/lazydocs)](https://nodejs.org)
-[![Downloads](https://img.shields.io/npm/dm/@tfkedar/lazydocs)](https://www.npmjs.com/package/@tfkedar/lazydocs)
+[![Node.js Version](https://img.shields.io/node/v/@lazykedar/lazydocs)](https://nodejs.org)
+[![Downloads](https://img.shields.io/npm/dm/@lazykedar/lazydocs)](https://www.npmjs.com/package/@lazykedar/lazydocs)
 [![GitHub stars](https://img.shields.io/github/stars/kedar49/lazydocs?style=social)](https://github.com/kedar49/lazydocs/stargazers)
 ```

@@ -1,393 +1,302 @@
 // Initialize Lucide icons
 lucide.createIcons();
 
-// Mobile menu toggle
+/* -------------------------------------------------------------
+ * 1. Global Copy-to-Clipboard & Floating Tooltip Utility
+ * ------------------------------------------------------------- */
+function showCopyTooltip(message = 'Copied to clipboard!') {
+    // Remove existing tooltip if any
+    const existing = document.querySelector('.copy-tooltip');
+    if (existing) existing.remove();
+
+    const tooltip = document.createElement('div');
+    tooltip.className = 'copy-tooltip';
+    tooltip.innerHTML = `<i data-lucide="check-circle" style="width:16px;height:16px;color:#10B981;"></i> <span>${message}</span>`;
+    document.body.appendChild(tooltip);
+    lucide.createIcons();
+
+    // Fade out and remove
+    setTimeout(() => {
+        tooltip.style.opacity = '0';
+        tooltip.style.transform = 'translateY(10px)';
+        tooltip.style.transition = 'all 0.3s ease';
+        setTimeout(() => tooltip.remove(), 300);
+    }, 1500);
+}
+
+async function copyTextToClipboard(text) {
+    try {
+        await navigator.clipboard.writeText(text);
+        showCopyTooltip();
+    } catch (err) {
+        console.error('Failed to copy: ', err);
+    }
+}
+
+// Bind standard copy buttons
+document.querySelectorAll('.copy-box-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const text = btn.getAttribute('data-copy');
+        copyTextToClipboard(text);
+    });
+});
+
+document.querySelectorAll('.notebook-copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-copy-id');
+        const codeElement = document.getElementById(targetId);
+        if (codeElement) {
+            copyTextToClipboard(codeElement.textContent);
+        }
+    });
+});
+
+
+/* -------------------------------------------------------------
+ * 2. Interactive Terminal Simulator (Typewriter Effects)
+ * ------------------------------------------------------------- */
+const terminalContainer = document.getElementById('terminal-simulator');
+
+const terminalScript = [
+    { type: 'input', text: 'npm install -g @lazykedar/lazydocs' },
+    { type: 'log', text: 'added 386 packages in 4.2s', delay: 600 },
+    { type: 'input', text: 'lazydocs generate --interactive' },
+    { type: 'log', text: 'Analyzing codebase...', delay: 400 },
+    { type: 'info', text: '  Found 14 files, 1,280 lines of code' },
+    { type: 'info', text: '  Functions: 26, Classes: 4, Avg Complexity: 2.4' },
+    { type: 'log', text: 'Generating documentation via llama-3.3-70b-versatile...', delay: 800 },
+    { type: 'success', text: '✔ README.md successfully created inside anchors! (0.8s)', delay: 1000 },
+    { type: 'code', text: '# @lazykedar/lazydocs\n\n## 📋 Overview\n<!-- lazydocs:start:overview -->\nLazyDocs is a high-performance, developer-native Node CLI...', delay: 200 }
+];
+
+let scriptIndex = 0;
+
+function clearTerminal() {
+    terminalContainer.innerHTML = '';
+}
+
+function writeLine(className, content) {
+    const line = document.createElement('div');
+    line.className = `terminal-line ${className}`;
+    line.innerHTML = content;
+    terminalContainer.appendChild(line);
+    terminalContainer.scrollTop = terminalContainer.scrollHeight;
+}
+
+function typeCommand(text, callback) {
+    const line = document.createElement('div');
+    line.className = 'terminal-line';
+    line.innerHTML = `<span class="terminal-prompt">$</span><span class="typing-text"></span><span class="terminal-cursor"></span>`;
+    terminalContainer.appendChild(line);
+    
+    const typingSpan = line.querySelector('.typing-text');
+    const cursor = line.querySelector('.terminal-cursor');
+    let charIndex = 0;
+    
+    const interval = setInterval(() => {
+        typingSpan.textContent += text.charAt(charIndex);
+        charIndex++;
+        terminalContainer.scrollTop = terminalContainer.scrollHeight;
+        
+        if (charIndex >= text.length) {
+            clearInterval(interval);
+            cursor.remove();
+            setTimeout(callback, 500);
+        }
+    }, 55);
+}
+
+function runTerminalSimulation() {
+    if (scriptIndex >= terminalScript.length) {
+        // Reset simulation after a pause
+        setTimeout(() => {
+            clearTerminal();
+            scriptIndex = 0;
+            runTerminalSimulation();
+        }, 5000);
+        return;
+    }
+    
+    const step = terminalScript[scriptIndex];
+    scriptIndex++;
+    
+    if (step.type === 'input') {
+        typeCommand(step.text, runTerminalSimulation);
+    } else {
+        const delay = step.delay || 300;
+        setTimeout(() => {
+            let colorClass = 'terminal-comment';
+            if (step.type === 'success') colorClass = 'terminal-success';
+            if (step.type === 'info') colorClass = 'terminal-info';
+            if (step.type === 'code') colorClass = 'terminal-code';
+            
+            // Format code previews nicely
+            const textToPrint = step.type === 'code' 
+                ? `<pre style="padding:0;background:transparent;border:none;box-shadow:none;color:#68DB9F;font-size:0.85rem;margin:0.5rem 0;">${step.text}</pre>`
+                : step.text;
+                
+            writeLine(colorClass, textToPrint);
+            runTerminalSimulation();
+        }, delay);
+    }
+}
+
+// Start simulator on load
+if (terminalContainer) {
+    runTerminalSimulation();
+}
+
+
+/* -------------------------------------------------------------
+ * 3. Interactive CLI Option Builder
+ * ------------------------------------------------------------- */
+const typeSelectors = document.querySelectorAll('#builder-type-selectors .selector-btn');
+const modelSelectors = document.querySelectorAll('#builder-model-selectors .selector-btn');
+const baseInput = document.getElementById('builder-base-input');
+const headInput = document.getElementById('builder-head-input');
+const templateInput = document.getElementById('builder-template-input');
+const commandOutput = document.getElementById('command-output');
+const btnCopyCommand = document.getElementById('btn-copy-command');
+
+const branchGroup = document.getElementById('branch-inputs-group');
+const templateGroup = document.getElementById('template-input-group');
+
+let selectedType = 'readme';
+let selectedModel = 'llama-3.3-70b-versatile';
+
+function updateCommand() {
+    let cmd = 'lazydocs generate';
+    
+    if (selectedType !== 'readme') {
+        cmd += ` -t ${selectedType}`;
+    }
+    
+    if (selectedModel !== 'llama-3.3-70b-versatile') {
+        cmd += ` -m ${selectedModel}`;
+    }
+    
+    if (selectedType === 'pr') {
+        const base = baseInput.value.trim();
+        const head = headInput.value.trim();
+        if (base) {
+            cmd += ` --base ${base}`;
+            if (head) {
+                cmd += ` --head ${head}`;
+            }
+        }
+    }
+    
+    if (selectedType === 'readme') {
+        const template = templateInput.value.trim();
+        if (template) {
+            cmd += ` --template ${template}`;
+        }
+    }
+    
+    commandOutput.textContent = cmd;
+}
+
+// Type selector clicks
+typeSelectors.forEach(btn => {
+    btn.addEventListener('click', () => {
+        typeSelectors.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedType = btn.getAttribute('data-value');
+        
+        // Toggle conditional inputs based on selected type
+        if (selectedType === 'pr') {
+            branchGroup.classList.remove('hidden');
+            templateGroup.classList.add('hidden');
+        } else if (selectedType === 'readme') {
+            branchGroup.classList.add('hidden');
+            templateGroup.classList.remove('hidden');
+        } else {
+            branchGroup.classList.add('hidden');
+            templateGroup.classList.add('hidden');
+        }
+        
+        updateCommand();
+    });
+});
+
+// Model selector clicks
+modelSelectors.forEach(btn => {
+    btn.addEventListener('click', () => {
+        modelSelectors.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedModel = btn.getAttribute('data-value');
+        updateCommand();
+    });
+});
+
+// Inputs changes
+if (baseInput) baseInput.addEventListener('input', updateCommand);
+if (headInput) headInput.addEventListener('input', updateCommand);
+if (templateInput) templateInput.addEventListener('input', updateCommand);
+
+// Copy Command action
+if (btnCopyCommand) {
+    btnCopyCommand.addEventListener('click', () => {
+        copyTextToClipboard(commandOutput.textContent);
+    });
+}
+
+// Run initial builder compiler
+updateCommand();
+
+
+/* -------------------------------------------------------------
+ * 4. Notebook Tabbed Preview Panel Controls
+ * ------------------------------------------------------------- */
+const tabButtons = document.querySelectorAll('.notebook-tabs .tab-btn');
+const tabContents = document.querySelectorAll('.notebook-body .tab-content');
+
+tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        // Toggle tab highlights
+        tabButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Toggle active panels
+        const targetId = btn.getAttribute('data-target');
+        tabContents.forEach(content => {
+            if (content.id === targetId) {
+                content.classList.add('active');
+            } else {
+                content.classList.remove('active');
+            }
+        });
+    });
+});
+
+
+/* -------------------------------------------------------------
+ * 5. Mobile Menu Toggle Responsive Handler
+ * ------------------------------------------------------------- */
 const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
 const navLinks = document.querySelector('.nav-links');
 
 if (mobileMenuToggle && navLinks) {
-    const toggleMenu = (forceClose = false) => {
-        const isOpen = forceClose ? false : !navLinks.classList.contains('active');
+    mobileMenuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
         const icon = mobileMenuToggle.querySelector('i');
-
-        if (!icon) {
-            console.warn('Mobile menu icon not found');
-            return;
-        }
-
+        const isOpen = navLinks.classList.contains('active');
+        
         if (isOpen) {
-            navLinks.classList.add('active');
-            document.body.classList.add('menu-open');
             icon.setAttribute('data-lucide', 'x');
         } else {
-            navLinks.classList.remove('active');
-            document.body.classList.remove('menu-open');
             icon.setAttribute('data-lucide', 'menu');
         }
-
-        // Re-initialize icons
         lucide.createIcons();
-    };
-
-    mobileMenuToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleMenu();
     });
 
-    // Close menu when clicking outside (on overlay)
-    document.addEventListener('click', (e) => {
-        if (navLinks.classList.contains('active') &&
-            !e.target.closest('.nav-links') &&
-            !e.target.closest('.mobile-menu-toggle')) {
-            toggleMenu(true);
-        }
-    });
-
-    // Close menu when clicking a link
+    // Close menu when clicking link
     navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
-            toggleMenu(true);
-        });
-    });
-
-    // Close menu on escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && navLinks.classList.contains('active')) {
-            toggleMenu(true);
-        }
-    });
-}
-
-// Smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
-
-// Scroll reveal animation
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-        }
-    });
-}, observerOptions);
-
-// Observe all cards and sections
-document.querySelectorAll('.feature-card, .example-card, .model-card, .step').forEach(el => {
-    el.classList.add('scroll-reveal');
-    observer.observe(el);
-});
-
-// Copy code functionality
-document.querySelectorAll('.copy-btn').forEach(button => {
-    button.addEventListener('click', async function () {
-        const code = this.getAttribute('data-copy');
-
-        try {
-            await navigator.clipboard.writeText(code);
-
-            // Change icon to check
-            const icon = this.querySelector('i');
-            const originalIcon = icon.getAttribute('data-lucide');
-
-            // Add copied class
-            this.classList.add('copied');
-            icon.setAttribute('data-lucide', 'check');
+            navLinks.classList.remove('active');
+            const icon = mobileMenuToggle.querySelector('i');
+            icon.setAttribute('data-lucide', 'menu');
             lucide.createIcons();
-
-            // Reset after 2 seconds
-            setTimeout(() => {
-                this.classList.remove('copied');
-                icon.setAttribute('data-lucide', 'copy');
-                lucide.createIcons();
-            }, 2000);
-        } catch (err) {
-            console.error('Failed to copy:', err);
-        }
-    });
-});
-
-// Copy code blocks on click
-document.querySelectorAll('pre code').forEach(block => {
-    // Skip if it's inside a code-block with copy button
-    if (block.closest('.code-block')) return;
-
-    block.style.cursor = 'pointer';
-    block.title = 'Click to copy';
-
-    block.addEventListener('click', async (e) => {
-        // Don't copy if clicking on scrollbar
-        if (e.offsetX > block.offsetWidth) return;
-
-        const text = block.textContent;
-        try {
-            await navigator.clipboard.writeText(text);
-
-            // Visual feedback
-            const originalBg = block.parentElement.style.background;
-            block.parentElement.style.background = 'var(--accent-light)';
-            block.parentElement.style.transition = 'background 0.3s';
-
-            setTimeout(() => {
-                block.parentElement.style.background = originalBg;
-            }, 300);
-
-            // Show tooltip
-            const tooltip = document.createElement('div');
-            tooltip.textContent = '✓ Copied!';
-            tooltip.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: var(--accent);
-                color: white;
-                padding: 0.75rem 1.5rem;
-                border-radius: 8px;
-                font-weight: 500;
-                z-index: 1000;
-                animation: fadeInUp 0.3s ease-out;
-            `;
-            document.body.appendChild(tooltip);
-
-            setTimeout(() => {
-                tooltip.style.opacity = '0';
-                tooltip.style.transform = 'translate(-50%, -50%) translateY(-10px)';
-                tooltip.style.transition = 'all 0.3s';
-                setTimeout(() => tooltip.remove(), 300);
-            }, 1500);
-        } catch (err) {
-            console.error('Failed to copy:', err);
-            // Fallback for older browsers
-            showCopyFallback();
-        }
-    });
-});
-
-// Fallback copy notification
-function showCopyFallback() {
-    const tooltip = document.createElement('div');
-    tooltip.textContent = 'Press Ctrl+C to copy';
-    tooltip.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: var(--text);
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
-        font-weight: 500;
-        z-index: 1000;
-    `;
-    document.body.appendChild(tooltip);
-    setTimeout(() => tooltip.remove(), 2000);
-}
-
-// Parallax effect for hero blobs (only on desktop)
-let mouseX = 0;
-let mouseY = 0;
-const isMobile = window.matchMedia('(max-width: 768px)').matches;
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-if (!isMobile && !prefersReducedMotion) {
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX / window.innerWidth;
-        mouseY = e.clientY / window.innerHeight;
-    });
-
-    function animateBlobs() {
-        const blob1 = document.querySelector('.blob-1');
-        const blob2 = document.querySelector('.blob-2');
-
-        if (blob1 && blob2) {
-            const moveX1 = (mouseX - 0.5) * 50;
-            const moveY1 = (mouseY - 0.5) * 50;
-            const moveX2 = (mouseX - 0.5) * -30;
-            const moveY2 = (mouseY - 0.5) * -30;
-
-            blob1.style.transform = `translate(${moveX1}px, ${moveY1}px)`;
-            blob2.style.transform = `translate(${moveX2}px, ${moveY2}px)`;
-        }
-
-        requestAnimationFrame(animateBlobs);
-    }
-
-    animateBlobs();
-}
-
-// Navbar scroll effect with throttling for better mobile performance
-let lastScroll = 0;
-let ticking = false;
-const navbar = document.querySelector('.navbar');
-
-window.addEventListener('scroll', () => {
-    if (!ticking) {
-        window.requestAnimationFrame(() => {
-            const currentScroll = window.pageYOffset;
-
-            if (currentScroll > 100) {
-                navbar.style.boxShadow = '0 4px 12px var(--shadow)';
-            } else {
-                navbar.style.boxShadow = 'none';
-            }
-
-            lastScroll = currentScroll;
-            ticking = false;
-        });
-
-        ticking = true;
-    }
-}, { passive: true });
-
-// Add hover effect to feature cards (desktop only)
-if (!isMobile) {
-    document.querySelectorAll('.feature-card, .example-card, .model-card').forEach(card => {
-        card.addEventListener('mouseenter', function () {
-            this.style.transform = 'translateY(-8px) scale(1.02)';
-        });
-
-        card.addEventListener('mouseleave', function () {
-            this.style.transform = 'translateY(0) scale(1)';
         });
     });
 }
-
-// Touch feedback for mobile
-if (isMobile) {
-    document.querySelectorAll('.btn, .feature-card, .example-card, .model-card').forEach(element => {
-        element.addEventListener('touchstart', function () {
-            this.style.transform = 'scale(0.98)';
-        });
-
-        element.addEventListener('touchend', function () {
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 150);
-        });
-    });
-}
-
-// Animate numbers (if you want to add stats)
-function animateValue(element, start, end, duration) {
-    let startTimestamp = null;
-    const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        element.textContent = Math.floor(progress * (end - start) + start);
-        if (progress < 1) {
-            window.requestAnimationFrame(step);
-        }
-    };
-    window.requestAnimationFrame(step);
-}
-
-// Add sparkle effect on hover for buttons
-document.querySelectorAll('.btn-primary').forEach(button => {
-    button.addEventListener('mouseenter', function (e) {
-        const sparkle = document.createElement('span');
-        sparkle.style.cssText = `
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: white;
-            border-radius: 50%;
-            pointer-events: none;
-            animation: sparkle 0.6s ease-out forwards;
-        `;
-
-        const rect = this.getBoundingClientRect();
-        sparkle.style.left = (e.clientX - rect.left) + 'px';
-        sparkle.style.top = (e.clientY - rect.top) + 'px';
-
-        this.style.position = 'relative';
-        this.appendChild(sparkle);
-
-        setTimeout(() => sparkle.remove(), 600);
-    });
-});
-
-// Add CSS for sparkle animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes sparkle {
-        0% {
-            transform: scale(0);
-            opacity: 1;
-        }
-        100% {
-            transform: scale(4);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// Typing effect for hero title (optional)
-function typeWriter(element, text, speed = 100) {
-    let i = 0;
-    element.textContent = '';
-
-    function type() {
-        if (i < text.length) {
-            element.textContent += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
-        }
-    }
-
-    type();
-}
-
-// Add loading animation
-window.addEventListener('load', () => {
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.5s';
-    setTimeout(() => {
-        document.body.style.opacity = '1';
-    }, 100);
-});
-
-// Easter egg: Konami code
-let konamiCode = [];
-const konamiPattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-
-document.addEventListener('keydown', (e) => {
-    konamiCode.push(e.key);
-    konamiCode = konamiCode.slice(-10);
-
-    if (konamiCode.join(',') === konamiPattern.join(',')) {
-        // Easter egg activated!
-        document.body.style.animation = 'rainbow 2s infinite';
-        setTimeout(() => {
-            document.body.style.animation = '';
-        }, 5000);
-    }
-});
-
-const rainbowStyle = document.createElement('style');
-rainbowStyle.textContent = `
-    @keyframes rainbow {
-        0% { filter: hue-rotate(0deg); }
-        100% { filter: hue-rotate(360deg); }
-    }
-`;
-document.head.appendChild(rainbowStyle);
-
-console.log('%c🚀 LazyDocs', 'font-size: 24px; font-weight: bold; color: #FF6B6B;');
-console.log('%cBuilt with ❤️ using Groq AI', 'font-size: 14px; color: #6B6B6B;');
-console.log('%cTry the Konami code! ↑↑↓↓←→←→BA', 'font-size: 12px; color: #FF6B6B;');

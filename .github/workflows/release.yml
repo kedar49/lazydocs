@@ -76,7 +76,7 @@ jobs:
             ## Installation
             
             ```bash
-            npm install -g @tfkedar/lazydocs@${{ steps.get_version.outputs.VERSION }}
+            npm install -g @lazykedar/lazydocs@${{ steps.get_version.outputs.VERSION }}
             ```
             
             ## Quick Start
@@ -91,7 +91,7 @@ jobs:
             
             ## Links
             
-            - [NPM Package](https://www.npmjs.com/package/@tfkedar/lazydocs)
+            - [NPM Package](https://www.npmjs.com/package/@lazykedar/lazydocs)
             - [Documentation](https://github.com/${{ github.repository }}#readme)
             - [Changelog](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md)
           draft: false

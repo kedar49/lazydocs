@@ -2,13 +2,13 @@
 
 AI-powered documentation generator using Groq. Generate READMEs, PR descriptions, and changelogs in seconds.
 
-[![npm](https://img.shields.io/npm/v/@tfkedar/lazydocs)](https://www.npmjs.com/package/@tfkedar/lazydocs)
+[![npm](https://img.shields.io/npm/v/@lazykedar/lazydocs)](https://www.npmjs.com/package/@lazykedar/lazydocs)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Install
 
 ```bash
-npm install -g @tfkedar/lazydocs
+npm install -g @lazykedar/lazydocs
 ```
 
 ## Setup
@@ -37,10 +37,12 @@ lazydocs generate --type changelog
 
 ## Features
 
-- Fast - Powered by Groq's LLM inference
-- Smart - Token-efficient analysis handles 100+ file projects
-- Reliable - Automatic retry logic with exponential backoff
-- Easy - Interactive CLI with helpful prompts
+- **Fast** - Powered by Groq's LLM inference.
+- **Smart Merging** - Automatically updates sections within comment anchors (`<!-- lazydocs:start:section -->`), preserving manual edits.
+- **Custom Templates** - Use your own Handlebars layouts to structure README files.
+- **Branch Comparison** - Compare custom branch ranges for precise PR descriptions.
+- **Reliable** - Automatic retry logic with exponential backoff.
+- **Easy** - Interactive CLI with helpful prompts.
 
 ## Configuration
 
@@ -63,6 +65,61 @@ lazydocs generate [options]
   --max-tokens <tokens>   Max response length (default: 2048)
   --interactive           Interactive mode
   --verbose               Show details
+  --template <path>       Custom Handlebars template path (README only)
+  --base <branch>         Base branch for PR diff comparison
+  --head <branch>         Head branch for PR diff comparison
+```
+
+## Advanced Usage
+
+### 🔄 Smart Merging (Incremental Updates)
+
+To prevent `lazydocs` from overwriting custom edits in your README, wrap dynamic sections in comment anchors. On subsequent runs, `lazydocs` will only update content within these tags:
+
+```markdown
+# My Project
+
+This is a manually written description that will never be overwritten.
+
+## 📋 Overview
+<!-- lazydocs:start:overview -->
+Overview content automatically managed by lazydocs.
+<!-- lazydocs:end:overview -->
+
+Some other manual developer notes...
+```
+
+Supported default anchors:
+- `<!-- lazydocs:start:overview -->` / `<!-- lazydocs:end:overview -->`
+- `<!-- lazydocs:start:stats -->` / `<!-- lazydocs:end:stats -->`
+- `<!-- lazydocs:start:usage -->` / `<!-- lazydocs:end:usage -->`
+- `<!-- lazydocs:start:api -->` / `<!-- lazydocs:end:api -->`
+
+### 🎨 Custom Templates
+
+Create a custom Handlebars file (e.g. `my-readme.hbs`) and specify it with the `--template` option:
+
+```bash
+lazydocs generate --type readme --template ./my-readme.hbs
+```
+
+Available variables in the template:
+- `{{projectName}}` - Name of the project.
+- `{{{overview}}}` - Generated overview section.
+- `{{{usage}}}` - Generated usage guidelines.
+- `{{stats}}` - Object containing `fileCount`, `totalLines`, `functions`, `classes`, and `complexity`.
+- `{{apis}}` - List of parsed functions and classes containing `name` and `desc`.
+
+### 🔀 Git PR Branch Comparisons
+
+Generate PR descriptions by comparing custom git branches:
+
+```bash
+# Compare the current branch against main
+lazydocs generate --type pr --base main
+
+# Compare a feature branch against production
+lazydocs generate --type pr --base production --head feature-login
 ```
 
 ## Models
@@ -87,7 +144,7 @@ Popular models:
 
 ## Links
 
-- [NPM Package](https://www.npmjs.com/package/@tfkedar/lazydocs)
+- [NPM Package](https://www.npmjs.com/package/@lazykedar/lazydocs)
 - [GitHub](https://github.com/kedar49/lazydocs)
 - [Issues](https://github.com/kedar49/lazydocs/issues)
 - [Groq Console](https://console.groq.com)

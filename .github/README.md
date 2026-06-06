@@ -2,7 +2,7 @@
 
 > Stop writing docs. Let AI do it.
 
-[![npm](https://img.shields.io/npm/v/@tfkedar/lazydocs)](https://www.npmjs.com/package/@tfkedar/lazydocs)
+[![npm](https://img.shields.io/npm/v/@lazykedar/lazydocs)](https://www.npmjs.com/package/@lazykedar/lazydocs)
 [![CI](https://github.com/kedar49/lazydocs/workflows/CI/badge.svg)](https://github.com/kedar49/lazydocs/actions)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -18,7 +18,7 @@ LazyDocs uses Groq's lightning-fast AI to generate professional documentation fr
 ## Install
 
 ```bash
-npm install -g @tfkedar/lazydocs
+npm install -g @lazykedar/lazydocs
 ```
 
 ## Setup
@@ -172,7 +172,7 @@ MIT © [Kedar Sathe](https://github.com/kedar49)
 
 ## Links
 
-- [NPM Package](https://www.npmjs.com/package/@tfkedar/lazydocs)
+- [NPM Package](https://www.npmjs.com/package/@lazykedar/lazydocs)
 - [GitHub Repo](https://github.com/kedar49/lazydocs)
 - [Report Issues](https://github.com/kedar49/lazydocs/issues)
 - [Groq Console](https://console.groq.com)
