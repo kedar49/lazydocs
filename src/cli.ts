@@ -236,7 +236,7 @@ program
             type: 'input',
             name: 'input',
             message: 'Input directory:',
-            default: './src',
+            default: fs.existsSync('./src') ? './src' : '.',
           },
           {
             type: 'list',
@@ -250,6 +250,11 @@ program
           },
         ]);
         Object.assign(options, answers);
+      }
+
+      // Fallback to current directory if default input directory does not exist
+      if (options.input === './src' && !fs.existsSync('./src')) {
+        options.input = '.';
       }
 
       // Set default output

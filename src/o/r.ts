@@ -59,7 +59,7 @@ export async function generateReadme(
 
   // Try to read project name from package.json
   let projectName = 'Your Project';
-  const packageJsonPath = path.join(process.cwd(), 'package.json');
+  const packageJsonPath = path.join(inputDir, 'package.json');
   if (fs.existsSync(packageJsonPath)) {
     try {
       const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));

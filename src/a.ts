@@ -48,7 +48,7 @@ export function analyzeCode(dir: string, maxTokens: number = 6000): CodeAnalysis
 
   // Load project config
   let projectConfig: ProjectConfig = {};
-  const configPath = path.join(process.cwd(), '.lazydocs.json');
+  const configPath = path.join(dir, '.lazydocs.json');
   if (fs.existsSync(configPath)) {
     try {
       projectConfig = JSON.parse(fs.readFileSync(configPath, 'utf-8'));

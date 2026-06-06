@@ -1,6 +1,6 @@
 {
   "name": "@lazykedar/lazydocs",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "AI-powered documentation generator using Groq. Generate READMEs, PR descriptions, and changelogs in seconds.",
   "main": "dist/index.js",
   "bin": {
