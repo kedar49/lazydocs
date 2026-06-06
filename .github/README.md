@@ -120,6 +120,12 @@ Reads your git history and creates a formatted changelog.
 
 Config lives in `~/.lazydocs`:
 
+Interactive setup (recommended):
+```bash
+lazydocs config setup
+```
+
+Or configure parameters manually:
 ```bash
 # Set API key
 lazydocs config set GROQ_API_KEY=your_key

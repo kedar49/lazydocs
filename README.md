@@ -46,6 +46,12 @@ lazydocs generate --type changelog
 
 ## Configuration
 
+Interactive setup (recommended):
+```bash
+lazydocs config setup
+```
+
+Or configure parameters individually:
 ```bash
 lazydocs config set GROQ_API_KEY=your_key
 lazydocs config list

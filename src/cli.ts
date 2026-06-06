@@ -18,10 +18,27 @@ const logError = (message: string) => {
 };
 
 const program = new commander.Command();
+
+// Dynamically resolve version from package.json
+let version = '2.0.1';
+try {
+  const pkgPath = path.join(__dirname, '../package.json');
+  if (fs.existsSync(pkgPath)) {
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
+    version = pkg.version || version;
+  } else {
+    const devPkgPath = path.join(__dirname, 'package.json');
+    if (fs.existsSync(devPkgPath)) {
+      const pkg = JSON.parse(fs.readFileSync(devPkgPath, 'utf-8'));
+      version = pkg.version || version;
+    }
+  }
+} catch {}
+
 program
   .name('lazydocs')
   .description('AI-powered documentation generator using Groq')
-  .version('1.1.0');
+  .version(version);
 
 // Config commands
 const configCmd = program.command('config');
@@ -99,6 +116,66 @@ configCmd
       }
     } catch (error: any) {
       logError(`Config delete error: ${error.message}`);
+      console.error(`Error: ${error.message}`);
+      process.exit(1);
+    }
+  });
+
+configCmd
+  .command('setup')
+  .description('Interactively setup configuration parameters')
+  .action(async () => {
+    try {
+      console.log('--- LazyDocs Configuration Setup ---\n');
+      const answers = await inquirer.default.prompt([
+        {
+          type: 'password',
+          name: 'GROQ_API_KEY',
+          message: 'Enter your Groq API key (starts with gsk_):',
+          validate: (input: string) => {
+            if (!input) return 'API key is required!';
+            if (!input.startsWith('gsk_')) return 'API key must start with "gsk_"';
+            if (input.length <= 20) return 'API key format is invalid';
+            return true;
+          },
+        },
+        {
+          type: 'list',
+          name: 'DEFAULT_MODEL',
+          message: 'Select default AI model:',
+          choices: getFallbackModels(),
+          default: 'llama-3.3-70b-versatile',
+        },
+        {
+          type: 'input',
+          name: 'TEMPERATURE',
+          message: 'Default temperature (0.0 to 2.0):',
+          default: '0.7',
+          validate: (input: string) => {
+            const val = parseFloat(input);
+            return (!isNaN(val) && val >= 0 && val <= 2) ? true : 'Must be a number between 0 and 2';
+          }
+        },
+        {
+          type: 'input',
+          name: 'MAX_TOKENS',
+          message: 'Default maximum tokens (100 to 131072):',
+          default: '2048',
+          validate: (input: string) => {
+            const val = parseInt(input, 10);
+            return (!isNaN(val) && val >= 100 && val <= 131072) ? true : 'Must be an integer between 100 and 131072';
+          }
+        }
+      ]);
+
+      setConfig('GROQ_API_KEY', answers.GROQ_API_KEY);
+      setConfig('DEFAULT_MODEL', answers.DEFAULT_MODEL);
+      setConfig('TEMPERATURE', answers.TEMPERATURE);
+      setConfig('MAX_TOKENS', answers.MAX_TOKENS);
+
+      console.log('\n✔ LazyDocs configuration successfully updated and saved in ~/.lazydocs!');
+    } catch (error: any) {
+      logError(`Config setup error: ${error.message}`);
       console.error(`Error: ${error.message}`);
       process.exit(1);
     }
