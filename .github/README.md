@@ -21,6 +21,11 @@ LazyDocs uses Groq's lightning-fast AI to generate professional documentation fr
 npm install -g @lazykedar/lazydocs
 ```
 
+To upgrade to the latest version at any time:
+```bash
+lazydocs upgrade
+```
+
 ## Setup
 
 Get a free API key from [console.groq.com](https://console.groq.com), then:

@@ -11,6 +11,11 @@ AI-powered documentation generator using Groq. Generate READMEs, PR descriptions
 npm install -g @lazykedar/lazydocs
 ```
 
+To upgrade to the latest version at any time:
+```bash
+lazydocs upgrade
+```
+
 ## Setup
 
 Get a free API key from [console.groq.com](https://console.groq.com):

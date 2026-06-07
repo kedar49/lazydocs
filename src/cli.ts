@@ -3,6 +3,7 @@ import * as commander from 'commander';
 import * as inquirer from 'inquirer';
 import * as fs from 'fs';
 import * as path from 'path';
+import { execSync } from 'child_process';
 import { generateReadme } from './o/r';
 import { generatePrDesc } from './o/p';
 import { generateChangelog } from './o/c';
@@ -428,6 +429,32 @@ program
     } catch (error: any) {
       logError(`Models error: ${error.message}`);
       console.error(`Error: ${error.message}`);
+      process.exit(1);
+    }
+  });
+
+// Upgrade command
+program
+  .command('upgrade')
+  .description('Upgrade lazydocs CLI to the latest version')
+  .action(() => {
+    try {
+      console.log('Checking for updates...');
+      const latestVersion = execSync('npm show @lazykedar/lazydocs version', { encoding: 'utf-8' }).trim();
+      console.log(`Current version: ${version}`);
+      console.log(`Latest version: ${latestVersion}`);
+
+      if (version === latestVersion) {
+        console.log('You are already on the latest version!');
+        return;
+      }
+
+      console.log(`Upgrading @lazykedar/lazydocs from ${version} to ${latestVersion}...`);
+      execSync('npm install -g @lazykedar/lazydocs@latest', { stdio: 'inherit' });
+      console.log('\n✔ Successfully upgraded to the latest version!');
+    } catch (error: any) {
+      logError(`Upgrade error: ${error.message}`);
+      console.error(`Error: Upgrade failed: ${error.message}`);
       process.exit(1);
     }
   });
